@@ -1,7 +1,8 @@
 import api from "./api.service";
+import { ApiRoutes } from "../shared/types/routes";
 
 export default class AuthService {
-  static async adminLogin(email: string, password: string) {
-    return api.post("auth/admin-login", { email, password });
+  static async login(email: string, password: string) {
+    return api.post(ApiRoutes.login, { email, password });
   }
 }

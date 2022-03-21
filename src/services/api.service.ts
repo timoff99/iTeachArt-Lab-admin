@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:5000/api";
+import { ROUTE_NAMES } from "../router/routeNames";
+import { ApiUrl } from "../shared/types/routes";
+
+export const API_URL = ApiUrl.dev;
 
 const api = axios.create({
   withCredentials: true,
@@ -13,7 +16,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response.data.message === "User not authorized") {
-      return (window.location.href = "/login");
+      return (window.location.href = ROUTE_NAMES.LOGIN);
     }
     return error;
   }

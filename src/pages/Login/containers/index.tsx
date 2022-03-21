@@ -10,6 +10,7 @@ import AuthService from "../../../services/auth.service";
 import { LoginView } from "../components";
 import { CustomError } from "../../../shared/helper/CustomError";
 import { ROUTE_NAMES } from "../../../router/routeNames";
+import { CookiesType } from "../../../shared/types/routes";
 
 const loginSchema = yup.object({
   email: yup.string().email("Enter a valid email").required("Email is required"),
@@ -30,13 +31,13 @@ export const LoginContainer: FC = () => {
     }
   };
 
-  const handleSubmit = async (values: ILogin) => {
+  const onSubmit = async (values: ILogin) => {
     try {
-      const loginData = await AuthService.adminLogin(values.email, values.password);
+      const loginData = await AuthService.login(values.email, values.password);
       if (!loginData.data) {
         throw loginData;
       }
-      Cookies.set("token", loginData.data.token);
+      Cookies.set(CookiesType.token, loginData.data.token);
 
       successNotify("user login");
       setTimeout(() => {
@@ -54,9 +55,7 @@ export const LoginContainer: FC = () => {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
-      handleSubmit(values);
-    },
+    onSubmit,
   });
 
   return <LoginView formik={formik} />;
