@@ -2,7 +2,6 @@ import * as React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 
 import { UserTableContainer } from "../../../components/Home/Users/containers";
-import { userData } from "../../../shared/interfaces/UserTable";
 
 interface TabPanelProps {
   children: React.ReactNode;
@@ -23,11 +22,9 @@ function TabPanel(props: TabPanelProps) {
 interface IHomeViewProps {
   value: number;
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;
-  TryGetAllUser: (user_status?: string | undefined) => Promise<void>;
-  allUsers: [] | userData[];
 }
 
-export const HomeView: React.FC<IHomeViewProps> = ({ value, handleChange, TryGetAllUser, allUsers }) => {
+export const HomeView: React.FC<IHomeViewProps> = ({ value, handleChange }) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Box>
@@ -57,15 +54,15 @@ export const HomeView: React.FC<IHomeViewProps> = ({ value, handleChange, TryGet
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <UserTableContainer TryGetAllUser={() => TryGetAllUser()} allUsers={allUsers} />
+        <UserTableContainer status="" />
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        <UserTableContainer TryGetAllUser={() => TryGetAllUser("blocked")} allUsers={allUsers} />
+        <UserTableContainer status="blocked" />
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <UserTableContainer TryGetAllUser={() => TryGetAllUser("deleted")} allUsers={allUsers} />
+        <UserTableContainer status="deleted" />
       </TabPanel>
     </Box>
   );

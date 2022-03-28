@@ -21,46 +21,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { userData } from "../../../../shared/interfaces/UserTable";
 import { Order } from "../../../../shared/types/userTable";
 
-function descendingComparator<T>(a: any, b: any, orderBy: keyof T) {
-  if (orderBy === "cookbook_id" || orderBy === "recipe_id") {
-    if (b[orderBy].length < a[orderBy].length) {
-      return -1;
-    }
-    if (b[orderBy].length > a[orderBy].length) {
-      return 1;
-    }
-    return 0;
-  }
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: keyof userData
-): (a: { [key in Key]: number | string | string[] }, b: { [key in Key]: number | string | string[] }) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
 interface HeadCell {
   id: keyof userData;
   label: string;
@@ -91,7 +51,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
   order: Order;
-  orderBy: string;
+  orderBy: keyof userData;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof userData) => void;
 }
 
@@ -158,84 +118,82 @@ export const UserTableView: FC<IUserTableProps> = ({
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>
-        <TableContainer>
+        <TableContainer sx={{ borderRadius: "20px" }}>
           <Table stickyHeader sx={{ "& .MuiTableCell-root": { borderBottom: 0, pt: 5, pb: 0, pl: 5 } }} size={"medium"}>
             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
             <TableBody>
               {allUsers.length > 0 &&
-                stableSort(allUsers, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
-                        <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                          <Box sx={{ mr: 2 }}>
-                            <img
-                              style={{ borderRadius: "50%", width: "36px", height: "36px" }}
-                              src={row.image}
-                              alt={"img"}
-                              loading="lazy"
-                            />
-                          </Box>
-                          <Box>{row.username}</Box>
-                        </TableCell>
-                        <TableCell>{row.email}</TableCell>
-                        <TableCell>{row.cookbook_id.length}</TableCell>
-                        <TableCell>{row.recipe_id.length}</TableCell>
-                        <TableCell>
-                          <Chip
-                            label={row.user_status}
-                            sx={{
-                              fontSize: 14,
-                              fontWeight: "fontWeightMedium",
-                              width: 76,
-                              height: 25,
-                              textTransform: "capitalize",
-                              "&.MuiChip-root.MuiChip-filled": {
-                                color: (theme) => {
-                                  switch (row.user_status) {
-                                    case "active":
-                                      return theme.palette.success.main;
-                                    case "blocked":
-                                      return theme.palette.warning.main;
-                                    case "deleted":
-                                      return theme.palette.error.main;
-                                    default:
-                                      return theme.palette.success.main;
-                                  }
-                                },
-                                bgcolor: (theme) => {
-                                  switch (row.user_status) {
-                                    case "active":
-                                      return alpha(theme.palette.success.main, 0.1);
-                                    case "blocked":
-                                      return alpha(theme.palette.warning.main, 0.1);
-                                    case "deleted":
-                                      return alpha(theme.palette.error.main, 0.1);
-                                    default:
-                                      return alpha(theme.palette.success.main, 0.1);
-                                  }
-                                },
-                              },
-                            }}
+                allUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
+                      <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                        <Box sx={{ mr: 2 }}>
+                          <img
+                            style={{ borderRadius: "50%", width: "36px", height: "36px" }}
+                            src={row.image}
+                            alt={"img"}
+                            loading="lazy"
                           />
-                        </TableCell>
-                        <TableCell>
-                          <IconButton onClick={(e) => handleOpenMenu(e, row._id)}>{<MoreHorizIcon />}</IconButton>
-                          <Menu
-                            anchorEl={anchorElOption}
-                            open={openOption}
-                            sx={{ bottom: 0, left: "-30px" }}
-                            onClose={handleCloseMenu}
-                          >
-                            <MenuItem onClick={() => handleUpdateUserStatus(userId, "active")}>Active</MenuItem>
-                            <MenuItem onClick={() => handleUpdateUserStatus(userId, "blocked")}>Block</MenuItem>
-                            <MenuItem onClick={() => handleUpdateUserStatus(userId, "deleted")}>Delete</MenuItem>
-                          </Menu>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        </Box>
+                        <Box>{row.username}</Box>
+                      </TableCell>
+                      <TableCell>{row.email}</TableCell>
+                      <TableCell>{row.cookbook_id.length}</TableCell>
+                      <TableCell>{row.recipe_id.length}</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={row.user_status}
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: "fontWeightMedium",
+                            width: 76,
+                            height: 25,
+                            textTransform: "capitalize",
+                            "&.MuiChip-root.MuiChip-filled": {
+                              color: (theme) => {
+                                switch (row.user_status) {
+                                  case "active":
+                                    return theme.palette.success.main;
+                                  case "blocked":
+                                    return theme.palette.warning.main;
+                                  case "deleted":
+                                    return theme.palette.error.main;
+                                  default:
+                                    return theme.palette.success.main;
+                                }
+                              },
+                              bgcolor: (theme) => {
+                                switch (row.user_status) {
+                                  case "active":
+                                    return alpha(theme.palette.success.main, 0.1);
+                                  case "blocked":
+                                    return alpha(theme.palette.warning.main, 0.1);
+                                  case "deleted":
+                                    return alpha(theme.palette.error.main, 0.1);
+                                  default:
+                                    return alpha(theme.palette.success.main, 0.1);
+                                }
+                              },
+                            },
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <IconButton onClick={(e) => handleOpenMenu(e, row._id)}>{<MoreHorizIcon />}</IconButton>
+                        <Menu
+                          anchorEl={anchorElOption}
+                          open={openOption}
+                          sx={{ bottom: 0, left: "-30px" }}
+                          onClose={handleCloseMenu}
+                        >
+                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "active")}>Active</MenuItem>
+                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "blocked")}>Block</MenuItem>
+                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "deleted")}>Delete</MenuItem>
+                        </Menu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
 
               {emptyRows > 0 && (
                 <TableRow

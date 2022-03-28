@@ -6,18 +6,26 @@ import { Order } from "../../../../shared/types/userTable";
 
 import { UserTableView } from "../components";
 
-export const UserTableContainer = ({
-  allUsers,
-  TryGetAllUser,
-}: {
-  allUsers: userData[];
-  TryGetAllUser: () => Promise<void>;
-}) => {
+export const UserTableContainer = ({ status }: { status: string }) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof userData>("username");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [allUsers, setAllUsers] = useState<userData[] | []>([]);
 
+  const TryGetAllUser = async (user_status?: string, orderValue?: Order, orderByValue?: keyof userData) => {
+    try {
+      let getAllUser;
+      if (user_status) {
+        getAllUser = await UserService.getAllUsers(user_status, orderValue, orderByValue);
+      } else {
+        getAllUser = await UserService.getAllUsers("", orderValue, orderByValue);
+      }
+      setAllUsers(getAllUser.data.allUsers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
   const [userId, setUserId] = useState<string>("");
   const openOption = Boolean(anchorElOption);
@@ -30,19 +38,21 @@ export const UserTableContainer = ({
   };
 
   useEffect(() => {
-    TryGetAllUser();
+    TryGetAllUser(status, order, orderBy);
   }, []);
 
   const handleUpdateUserStatus = async (_id: string, user_status: string) => {
     await UserService.updateUserStatus(_id, user_status);
-    TryGetAllUser();
+    TryGetAllUser(status, order, orderBy);
     handleCloseMenu();
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof userData) => {
     const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const orderValue = isAsc ? "desc" : "asc";
+    setOrder(orderValue);
     setOrderBy(property);
+    TryGetAllUser(status, orderValue, property);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
