@@ -4,7 +4,9 @@ export enum ApiUrl {
 
 export enum ApiRoutes {
   login = "auth/login",
+  getAllUsers = "user/get-all-users",
   getUser = "user/get-user",
+  updateUserStatus = "user/update-user-status",
 }
 
 export enum CookiesType {
