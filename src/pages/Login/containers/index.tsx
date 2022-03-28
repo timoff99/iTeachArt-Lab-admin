@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import AuthService from "../../../services/auth.service";
 
 import { LoginView } from "../components";
-import { CustomError } from "../../../shared/helper/CustomError";
+import { CustomError } from "../../../shared/interfaces/CustomError";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 import { CookiesType } from "../../../shared/types/routes";
 

@@ -141,7 +141,7 @@ module.exports = {
     "no-return-await": "error",
     "no-shadow": "warn",
     "no-trailing-spaces": "off",
-    "no-underscore-dangle": "warn",
+    "no-underscore-dangle": "off",
     "no-unused-labels": "error",
     "no-var": "error",
     "padded-blocks": [

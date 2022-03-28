@@ -21,5 +21,14 @@ export const theme = createTheme({
     primary: {
       main: "#FFBC01",
     },
+    success: {
+      main: "#00E343",
+    },
+    warning: {
+      main: "#FBB500",
+    },
+    error: {
+      main: "#F70202",
+    },
   },
 });
