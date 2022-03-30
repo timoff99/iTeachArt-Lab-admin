@@ -2,7 +2,7 @@ import api from "./api.service";
 
 import { userData } from "../shared/interfaces/UserTable";
 import { ApiRoutes } from "../shared/types/routes";
-import { Order } from "../shared/types/userTable";
+import { Order } from "../shared/types/table";
 
 export default class UserService {
   static async getAllUsers(user_status?: string, order?: Order, orderBy?: keyof userData) {
@@ -13,6 +13,9 @@ export default class UserService {
   }
   static async getUser() {
     return api.get(ApiRoutes.getUser);
+  }
+  static async getUserStatistics() {
+    return api.get(ApiRoutes.getUserStatistics);
   }
   static async updateUserStatus(_id: string, user_status: string) {
     return api.put(ApiRoutes.updateUserStatus, { _id, user_status });

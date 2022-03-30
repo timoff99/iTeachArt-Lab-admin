@@ -1,9 +1,9 @@
 import React, { FC, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ROUTE_NAMES } from "../../../../router/routeNames";
-import UserService from "../../../../services/user.service";
-import { UserContext } from "../../UserProvider";
+import { ROUTE_NAMES } from "router/routeNames";
+import UserService from "services/user.service";
+import { UserContext } from "shared/ui-kit/UserProvider";
 
 import { LayoutView } from "../components";
 

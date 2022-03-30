@@ -4,6 +4,7 @@ export enum ROUTE_NAMES {
   USERS = "/users",
   STATISTICS = "/statistics",
   COOKBOOKS = "/cookbooks",
+  COOKBOOKSID = "/cookbooks/:id",
   RECIPES = "/recipes",
   COLLECTIONS = "/collections",
   SETTINGS = "/settings",

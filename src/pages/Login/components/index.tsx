@@ -3,8 +3,8 @@ import { FormikHandlers, FormikState } from "formik";
 import { Box, Button, Grid, Paper, TextField, InputLabel, Typography } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 
-import { ReactComponent as Logo } from "../../../static/icons/Logo.svg";
-import loginBg from "../../../static/images/loginBg.png";
+import { ReactComponent as Logo } from "static/icons/Logo.svg";
+import loginBg from "static/images/loginBg.png";
 
 interface ILoginViewProps {
   formik: FormikState<any> & FormikHandlers;
