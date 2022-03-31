@@ -1,4 +1,3 @@
-import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { GlobalStyles } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";

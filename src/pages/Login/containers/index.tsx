@@ -1,16 +1,15 @@
-import React, { FC } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-import AuthService from "../../../services/auth.service";
+import AuthService from "services/auth.service";
 
 import { LoginView } from "../components";
-import { CustomError } from "../../../shared/interfaces/CustomError";
-import { ROUTE_NAMES } from "../../../router/routeNames";
-import { CookiesType } from "../../../shared/types/routes";
+import { CustomError } from "shared/interfaces/CustomError";
+import { ROUTE_NAMES } from "router/routeNames";
+import { CookiesType } from "shared/types/routes";
 
 const loginSchema = yup.object({
   email: yup.string().email("Enter a valid email").required("Email is required"),
@@ -18,7 +17,7 @@ const loginSchema = yup.object({
 });
 type ILogin = yup.InferType<typeof loginSchema>;
 
-export const LoginContainer: FC = () => {
+export const LoginContainer = () => {
   const navigation = useNavigate();
 
   const successNotify = (msg: string) => {

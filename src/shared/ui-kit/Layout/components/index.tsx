@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
 import {
@@ -27,10 +27,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { ReactComponent as Logo } from "../../../../static/icons/Dashboard-logo.svg";
+import { ReactComponent as Logo } from "static/icons/Dashboard-logo.svg";
 import { menu } from "../mockData";
 
-import { UserContext } from "../../UserProvider";
+import { UserContext } from "shared/ui-kit/UserProvider";
 
 interface Scroll {
   window?: () => Window;
@@ -137,8 +137,8 @@ interface IHomeViewProps {
   mobileOpen: boolean;
 }
 
-export const LayoutView: FC<IHomeViewProps> = (
-  { handleDrawerToggle, handleOpenUserMenu, handleCloseUserMenu, anchorElUser, container, mobileOpen },
+export const LayoutView = (
+  { handleDrawerToggle, handleOpenUserMenu, handleCloseUserMenu, anchorElUser, container, mobileOpen }: IHomeViewProps,
   props: Props
 ) => {
   const drawer = (
@@ -149,12 +149,27 @@ export const LayoutView: FC<IHomeViewProps> = (
       <List>
         {menu.map(({ text, Icon, href }) => (
           <ListItemButton key={text} component={Link} href={href}>
-            <ListItemIcon>{<Icon color={href === location.pathname ? "primary" : "inherit"} />}</ListItemIcon>
+            <ListItemIcon>
+              {
+                <Icon
+                  color={
+                    href === location.pathname ||
+                    href === location.pathname.slice(0, location.pathname.lastIndexOf("/"))
+                      ? "primary"
+                      : "inherit"
+                  }
+                />
+              }
+            </ListItemIcon>
             <ListItemText
               primary={text}
               sx={{
                 "&	.MuiListItemText-primary": {
-                  color: href === location.pathname ? "primary.main" : "inherit",
+                  color:
+                    href === location.pathname ||
+                    href === location.pathname.slice(0, location.pathname.lastIndexOf("/"))
+                      ? "primary.main"
+                      : "inherit",
                 },
               }}
             />
@@ -165,7 +180,6 @@ export const LayoutView: FC<IHomeViewProps> = (
   );
 
   return (
-    // bug with display flex - table broken
     <Box sx={{ display: "-webkit-box", bgcolor: "grey.100" }}>
       <CssBaseline />
       <HideOnScroll {...props}>
@@ -218,7 +232,7 @@ export const LayoutView: FC<IHomeViewProps> = (
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+      <Box component="nav" sx={{ width: { sm: drawerWidth }, height: "100vh", flexShrink: { sm: 0 } }}>
         <Drawer
           container={container}
           variant="temporary"
@@ -246,7 +260,7 @@ export const LayoutView: FC<IHomeViewProps> = (
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100vh" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar sx={{ mt: 5 }} />
         <Outlet />
       </Box>

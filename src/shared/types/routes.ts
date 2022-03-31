@@ -7,6 +7,13 @@ export enum ApiRoutes {
   getAllUsers = "user/get-all-users",
   getUser = "user/get-user",
   updateUserStatus = "user/update-user-status",
+  getCookbookStatistics = "cookbook/get-cookbook-statistics",
+  getRecipeStatistics = "recipe/get-recipe-statistics",
+  getUserStatistics = "user/get-user-statistics",
+  getAllSortedCookbooks = "cookbook/get-all-sorted-cookbooks",
+  getAllSortedRecipes = "recipe/get-all-sorted-recipes",
+  deleteCookbook = "cookbook/delete",
+  deleteRecipe = "recipe/delete",
 }
 
 export enum CookiesType {

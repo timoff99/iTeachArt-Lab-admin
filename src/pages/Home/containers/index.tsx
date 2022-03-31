@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { HomeView } from "../components";
 
-export const HomeContainer: React.FC = () => {
+export const HomeContainer = () => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

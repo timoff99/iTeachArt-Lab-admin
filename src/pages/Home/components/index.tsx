@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 
-import { UserTableContainer } from "../../../components/Home/Users/containers";
+import { UserTableContainer } from "components/Home/Users/containers";
 
 interface TabPanelProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ interface IHomeViewProps {
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;
 }
 
-export const HomeView: React.FC<IHomeViewProps> = ({ value, handleChange }) => {
+export const HomeView = ({ value, handleChange }: IHomeViewProps) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Box>

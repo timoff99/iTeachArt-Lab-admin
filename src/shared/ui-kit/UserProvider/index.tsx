@@ -18,7 +18,7 @@ type IAuthUser = {
   status: string;
 };
 
-type IUserContextProviderProps = {
+export type IUserContextProviderProps = {
   user: IAuthUser | null;
   setUser: React.Dispatch<React.SetStateAction<IAuthUser | null>>;
 };

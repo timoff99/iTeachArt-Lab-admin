@@ -5,7 +5,7 @@ import CookieIcon from "@mui/icons-material/Cookie";
 import ViewHeadlineIcon from "@mui/icons-material/ViewHeadline";
 import SettingsIcon from "@mui/icons-material/Settings";
 
-import { ROUTE_NAMES } from "../../../router/routeNames";
+import { ROUTE_NAMES } from "router/routeNames";
 
 export const menu = [
   { text: "Users", Icon: GroupIcon, selected: false, href: ROUTE_NAMES.HOME },
