@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 
 import CookBookService from "services/cookbook.service";
 
@@ -7,8 +7,8 @@ import { tableData } from "shared/interfaces/Table";
 import { Order } from "shared/types/table";
 import { TableContainer } from "shared/ui-kit/Table/containers";
 
-export const CookbookContainer: FC = () => {
-  const [dataRows, setDataRows] = useState<tableData[] | []>([]);
+export const CookbookContainer = () => {
+  const [dataRows, setDataRows] = useState<tableData[]>([]);
 
   const TryGetCookbook = async (orderValue?: Order, orderByValue?: keyof tableData) => {
     try {

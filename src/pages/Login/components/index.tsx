@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import { FormikHandlers, FormikState } from "formik";
 import { Box, Button, Grid, Paper, TextField, InputLabel, Typography } from "@mui/material";
 import { ToastContainer } from "react-toastify";
@@ -27,7 +26,7 @@ const boxStyle = { background: `url(${loginBg}) no-repeat`, backgroundSize: "cov
 
 const parerStyle = { padding: 70, margin: "100px auto", borderRadius: "16px" };
 
-export const LoginView: FC<ILoginViewProps> = ({ formik }) => {
+export const LoginView = ({ formik }: ILoginViewProps) => {
   return (
     <Box style={boxStyle}>
       <Grid container>

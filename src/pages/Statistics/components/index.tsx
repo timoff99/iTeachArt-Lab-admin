@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import { Avatar, Box, Card, CardMedia, Grid, Typography } from "@mui/material";
 
 interface Props {
@@ -8,12 +7,7 @@ interface Props {
   cardsStatistics: Array<{ title: string; views: number; image: string; cardName: string; author: string }>;
 }
 
-export const StatisticsView: FC<Props> = ({
-  statistics,
-  userStatistics,
-  mostActiveUserStatistics,
-  cardsStatistics,
-}) => {
+export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStatistics, cardsStatistics }: Props) => {
   return (
     <Box>
       <Typography fontWeight="fontWeightBold" fontSize={22} gutterBottom>

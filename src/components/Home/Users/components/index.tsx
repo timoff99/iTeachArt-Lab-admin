@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import {
   Box,
   Table,
@@ -98,7 +98,7 @@ interface IUserTableProps {
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const UserTableView: FC<IUserTableProps> = ({
+export const UserTableView = ({
   order,
   orderBy,
   handleRequestSort,
@@ -114,7 +114,7 @@ export const UserTableView: FC<IUserTableProps> = ({
   emptyRows,
   handleChangePage,
   handleChangeRowsPerPage,
-}) => {
+}: IUserTableProps) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>

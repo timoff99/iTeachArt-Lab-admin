@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import CookBookService from "services/cookbook.service";
 import RecipeService from "services/recipe.service";
@@ -6,32 +6,31 @@ import UserService from "services/user.service";
 
 import { StatisticsView } from "../components";
 
-export const StatisticsContainer: FC = () => {
-  const [statistics, setStatistics] = useState<Array<{ title: string; value: number }> | []>([]);
-  const [userStatistics, setUserStatistics] = useState<Array<{ title: string; value: number }> | []>([]);
+export const StatisticsContainer = () => {
+  const [statistics, setStatistics] = useState<Array<{ title: string; value: number }>>([]);
+  const [userStatistics, setUserStatistics] = useState<Array<{ title: string; value: number }>>([]);
   const [mostActiveUserStatistics, setMostActiveUserStatistics] = useState<
-    Array<{ image: string; username: string; value: number; type: string }> | []
+    Array<{ image: string; username: string; value: number; type: string }>
   >([]);
   const [cardsStatistics, setCardsStatistics] = useState<
-    Array<{ title: string; views: number; image: string; cardName: string; author: string }> | []
+    Array<{ title: string; views: number; image: string; cardName: string; author: string }>
   >([]);
 
   const getStatistics = async () => {
-    const statistics = await Promise.all([
+    const [cookbookStatistics, recipeStatistics, userStatistics] = await Promise.all([
       CookBookService.getCookbookStatistics(),
       RecipeService.getRecipeStatistics(),
       UserService.getUserStatistics(),
     ]);
 
-    const cookbookCount = statistics[0].data.cookbookCount;
-    const recipeCount = statistics[1].data.recipeCount;
-    const cookbookViews = statistics[0].data.cookbookViews[0].total;
-    const recipeViews = statistics[1].data.recipeViews[0].total;
+    const cookbookCount = cookbookStatistics.data.cookbookCount;
+    const recipeCount = recipeStatistics.data.recipeCount;
+    const cookbookViews = cookbookStatistics.data.cookbookViews[0].total;
+    const recipeViews = recipeStatistics.data.recipeViews[0].total;
 
-    const mostPopularCookbook = statistics[0].data.mostPopularCookbook[0];
-    const mostPopularRecipe = statistics[1].data.mostPopularRecipe[0];
+    const mostPopularCookbook = cookbookStatistics.data.mostPopularCookbook[0];
+    const mostPopularRecipe = recipeStatistics.data.mostPopularRecipe[0];
 
-    const userStatistics = statistics[2].data;
     setStatistics([
       { title: "Cookbooks count", value: cookbookCount },
       { title: "Recipes count", value: cookbookViews },
@@ -39,21 +38,21 @@ export const StatisticsContainer: FC = () => {
       { title: "Recipes views", value: recipeViews },
     ]);
     setUserStatistics([
-      { title: "All users", value: userStatistics.allUsersCount },
-      { title: "Blocked", value: userStatistics.blockedUsers },
-      { title: "Deleted", value: userStatistics.deletedUsers },
+      { title: "All users", value: userStatistics.data.allUsersCount },
+      { title: "Blocked", value: userStatistics.data.blockedUsers },
+      { title: "Deleted", value: userStatistics.data.deletedUsers },
     ]);
     setMostActiveUserStatistics([
       {
-        image: userStatistics.mostActiveCookbookUser[0].image,
-        username: userStatistics.mostActiveCookbookUser[0].username,
-        value: userStatistics.mostActiveCookbookUser[0].cookbook_id.length,
+        image: userStatistics.data.mostActiveCookbookUser[0].image,
+        username: userStatistics.data.mostActiveCookbookUser[0].username,
+        value: userStatistics.data.mostActiveCookbookUser[0].cookbook_id.length,
         type: "cookbooks",
       },
       {
-        image: userStatistics.mostActiveRecipeUser[0].image,
-        username: userStatistics.mostActiveRecipeUser[0].username,
-        value: userStatistics.mostActiveRecipeUser[0].recipe_id.length,
+        image: userStatistics.data.mostActiveRecipeUser[0].image,
+        username: userStatistics.data.mostActiveRecipeUser[0].username,
+        value: userStatistics.data.mostActiveRecipeUser[0].recipe_id.length,
         type: "recipes",
       },
     ]);

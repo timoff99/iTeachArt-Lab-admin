@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { tableData } from "shared/interfaces/Table";
 import { Order } from "shared/types/table";
@@ -7,11 +7,11 @@ import { TableView } from "../components";
 
 interface Props {
   TryGetData: (orderValue?: Order | undefined, orderByValue?: keyof tableData | undefined) => Promise<void>;
-  dataRows: tableData[] | [];
+  dataRows: tableData[];
   handleDelete: (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => Promise<void>;
 }
 
-export const TableContainer: FC<Props> = ({ TryGetData, dataRows, handleDelete }) => {
+export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof tableData>("title");
   const [page, setPage] = useState(0);

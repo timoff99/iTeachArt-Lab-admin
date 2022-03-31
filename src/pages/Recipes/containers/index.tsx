@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { Typography } from "@mui/material";
 
 import RecipeService from "services/recipe.service";
@@ -7,8 +7,8 @@ import { tableData } from "shared/interfaces/Table";
 import { Order } from "shared/types/table";
 import { TableContainer } from "shared/ui-kit/Table/containers";
 
-export const RecipesContainer: FC = () => {
-  const [dataRows, setDataRows] = useState<tableData[] | []>([]);
+export const RecipesContainer = () => {
+  const [dataRows, setDataRows] = useState<tableData[]>([]);
 
   const TryGetRecipe = async (orderValue?: Order, orderByValue?: keyof tableData) => {
     try {

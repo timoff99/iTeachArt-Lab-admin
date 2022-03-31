@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
-export const CookbookDetailsView: FC = () => {
+export const CookbookDetailsView = () => {
   return <div>CookbookDetails</div>;
 };

@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ROUTE_NAMES } from "router/routeNames";
@@ -11,7 +11,7 @@ interface Props {
   window?: () => Window;
   children?: React.ReactNode;
 }
-export const LayoutContainer: FC = (props: Props) => {
+export const LayoutContainer = (props: Props) => {
   const context = useContext(UserContext);
   const navigation = useNavigate();
 

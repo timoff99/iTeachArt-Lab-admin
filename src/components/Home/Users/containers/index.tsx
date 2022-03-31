@@ -11,7 +11,7 @@ export const UserTableContainer = ({ status }: { status: string }) => {
   const [orderBy, setOrderBy] = useState<keyof userData>("username");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [allUsers, setAllUsers] = useState<userData[] | []>([]);
+  const [allUsers, setAllUsers] = useState<userData[]>([]);
 
   const TryGetAllUser = async (user_status?: string, orderValue?: Order, orderByValue?: keyof userData) => {
     try {

@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
 import {
@@ -137,8 +137,8 @@ interface IHomeViewProps {
   mobileOpen: boolean;
 }
 
-export const LayoutView: FC<IHomeViewProps> = (
-  { handleDrawerToggle, handleOpenUserMenu, handleCloseUserMenu, anchorElUser, container, mobileOpen },
+export const LayoutView = (
+  { handleDrawerToggle, handleOpenUserMenu, handleCloseUserMenu, anchorElUser, container, mobileOpen }: IHomeViewProps,
   props: Props
 ) => {
   const drawer = (

@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
@@ -18,7 +17,7 @@ const loginSchema = yup.object({
 });
 type ILogin = yup.InferType<typeof loginSchema>;
 
-export const LoginContainer: FC = () => {
+export const LoginContainer = () => {
   const navigation = useNavigate();
 
   const successNotify = (msg: string) => {
