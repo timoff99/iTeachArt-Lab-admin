@@ -19,6 +19,9 @@ export const LayoutContainer = (props: Props) => {
     if (!context?.user?.username) {
       try {
         const getUser = await UserService.getUser();
+        if (!getUser) {
+          throw new Error("user not found!");
+        }
         context?.setUser(getUser.data.user);
       } catch (error) {
         return navigation(ROUTE_NAMES.LOGIN, { replace: true });

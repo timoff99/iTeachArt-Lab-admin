@@ -34,15 +34,12 @@ export const RecipeView = ({
 }: IRecipeView) => (
   <>
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <IconButton
-        sx={{ color: "black", pl: 0 }}
-        onClick={() => navigation(location.pathname.slice(0, location.pathname.lastIndexOf("/")))}
-      >
+      <IconButton sx={{ color: "black", pl: 0 }} onClick={() => navigation(-1)}>
         <Icon>
-          <ArrowBackIcon sx={{ fontSize: { xs: "20px", md: "26px" } }} />
+          <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
         </Icon>
       </IconButton>
-      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: "20px", md: "26px" } }}>Return</Typography>
+      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 20, md: 26 } }}>Return</Typography>
     </Box>
 
     <Box sx={{ mt: 5, mb: 11, display: "flex", flexDirection: { xs: "column", md: "row" } }}>
@@ -61,10 +58,10 @@ export const RecipeView = ({
       />
       <Box sx={{ ml: { md: 2, lg: 4 }, flex: 1 }}>
         <Box sx={{ mb: 3 }}>
-          <Typography sx={{ fontWeight: "fontWeightBold", lineHeight: 1.167, fontSize: { xs: "30px", md: "53px" } }}>
+          <Typography sx={{ fontWeight: "fontWeightBold", lineHeight: 1.167, fontSize: { xs: 30, md: 53 } }}>
             {title}
           </Typography>
-          <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: "20px", md: "24px" } }} color="primary">
+          <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: 20, md: 24 } }} color="primary">
             {author}
           </Typography>
         </Box>
@@ -78,22 +75,22 @@ export const RecipeView = ({
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
           <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <Typography sx={{ fontSize: { xs: "20px", md: "24px" }, fontWeight: "fontWeightMedium" }} gutterBottom>
+            <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Directions
             </Typography>
             {ingredients?.map((el, index) => (
               <Box key={index}>
                 <Typography
-                  sx={{ fontWeight: "fontWeightBold", fontSize: { xs: "14", md: "16" }, display: "inline-block" }}
+                  sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 14, md: 16 }, display: "inline-block" }}
                 >
                   Step {index + 1}:
                 </Typography>{" "}
-                <Typography sx={{ fontSize: { xs: "14", md: "16" }, display: "inline-block" }}>{el}</Typography>
+                <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block" }}>{el}</Typography>
               </Box>
             ))}
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <Typography sx={{ fontSize: { xs: "20px", md: "24px" }, fontWeight: "fontWeightMedium" }} gutterBottom>
+            <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Ingredients
             </Typography>
             {steps?.map((el, index) => (
@@ -107,7 +104,7 @@ export const RecipeView = ({
                     display: "inline-block",
                   }}
                 />
-                <Typography sx={{ fontSize: { xs: "14", md: "16" }, display: "inline-block", ml: 1 }}>{el}</Typography>
+                <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block", ml: 1 }}>{el}</Typography>
               </Box>
             ))}
           </Box>

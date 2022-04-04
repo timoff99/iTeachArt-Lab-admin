@@ -6,15 +6,14 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 
 interface ICookbookView {
-  title: string | undefined;
-  author: string | undefined;
-  description: string | undefined;
-  likes: number | undefined;
-  comments: number | undefined;
-  views: number | undefined;
-  image: string | undefined;
+  title: string;
+  author: string;
+  description: string;
+  likes: number;
+  comments: number;
+  views: number;
+  image: string;
   navigation: NavigateFunction;
-  location: Location;
 }
 
 export const CookbookView = ({
@@ -26,27 +25,23 @@ export const CookbookView = ({
   views,
   image,
   navigation,
-  location,
 }: ICookbookView) => (
   <>
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <IconButton
-        sx={{ color: "black", pl: 0 }}
-        onClick={() => navigation(location.pathname.slice(0, location.pathname.lastIndexOf("/")))}
-      >
+      <IconButton sx={{ color: "black", pl: 0 }} onClick={() => navigation(-1)}>
         <Icon>
-          <ArrowBackIcon sx={{ fontSize: { xs: "20px", md: "26px" } }} />
+          <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
         </Icon>
       </IconButton>
-      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: "20px", md: "26px" } }}>Return</Typography>
+      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 20, md: 26 } }}>Return</Typography>
     </Box>
 
     <Box sx={{ mt: 5, mb: 11 }}>
       <Box sx={{ mb: 3 }}>
-        <Typography sx={{ fontWeight: "fontWeightBold", lineHeight: 1.167, fontSize: { xs: "30px", md: "53px" } }}>
+        <Typography sx={{ fontWeight: "fontWeightBold", lineHeight: 1.167, fontSize: { xs: 30, md: 53 } }}>
           {title}
         </Typography>
-        <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: "20px", md: "24px" } }} color="primary">
+        <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: 20, md: 24 } }} color="primary">
           {author}
         </Typography>
       </Box>

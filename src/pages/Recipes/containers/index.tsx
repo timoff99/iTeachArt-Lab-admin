@@ -13,6 +13,9 @@ export const RecipesContainer = () => {
   const TryGetRecipe = async (orderValue?: Order, orderByValue?: keyof tableData) => {
     try {
       const getAllRecipes = await RecipeService.getAllSortedRecipes(orderValue, orderByValue);
+      if (!getAllRecipes) {
+        throw new Error("all recipes not found!");
+      }
       setDataRows(getAllRecipes.data.allSortedRecipes);
     } catch (error) {
       console.log(error);
@@ -26,7 +29,7 @@ export const RecipesContainer = () => {
   };
   return (
     <>
-      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "22px" }} gutterBottom>
+      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
         Recipes
       </Typography>
       <TableContainer TryGetData={TryGetRecipe} dataRows={dataRows} handleDelete={handleDeleteRecipe} />

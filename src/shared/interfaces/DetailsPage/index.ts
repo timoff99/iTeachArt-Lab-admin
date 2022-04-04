@@ -22,7 +22,7 @@ export interface IComment {
 }
 
 export interface ICommentProps {
-  comments: IComment[] | undefined;
+  comments: IComment[];
   handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, userId: string, commentId: string) => void;
   anchorElOption: HTMLElement | null;
   openOption: boolean;

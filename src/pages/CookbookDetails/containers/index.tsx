@@ -16,7 +16,7 @@ export const CookbookDetailsContainer = () => {
   const [userId, setUserId] = useState<string>("");
   const [commentId, setCommentId] = useState<string>("");
   const openOption = Boolean(anchorElOption);
-  const [cookbookDetails, setCookbookDetails] = useState<cookbookData>();
+  const [cookbookDetails, setCookbookDetails] = useState<cookbookData | undefined>();
   const navigation = useNavigate();
   const location = useLocation();
 
@@ -24,6 +24,9 @@ export const CookbookDetailsContainer = () => {
     try {
       const id = location.pathname.slice(location.pathname.lastIndexOf("/") + 1);
       const getCookbookDetails = await CookBookService.getCookbook(id);
+      if (!getCookbookDetails) {
+        throw new Error("cookbook not found!");
+      }
       setCookbookDetails(getCookbookDetails.data);
     } catch (error) {
       console.log(error);
@@ -60,33 +63,36 @@ export const CookbookDetailsContainer = () => {
 
   return (
     <>
-      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "22px" }} gutterBottom>
+      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
         Cookbooks
       </Typography>
       <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-        <CookbookView
-          title={cookbookDetails?.title}
-          author={cookbookDetails?.author}
-          description={cookbookDetails?.description}
-          likes={cookbookDetails?.likes.length}
-          comments={cookbookDetails?.comments.length}
-          views={cookbookDetails?.views}
-          image={cookbookDetails?.image}
-          navigation={navigation}
-          location={location}
-        />
+        {cookbookDetails !== undefined && (
+          <CookbookView
+            title={cookbookDetails.title}
+            author={cookbookDetails.author}
+            description={cookbookDetails.description}
+            likes={cookbookDetails.likes.length}
+            comments={cookbookDetails.comments.length}
+            views={cookbookDetails.views}
+            image={cookbookDetails.image}
+            navigation={navigation}
+          />
+        )}
         {cookbookDetails !== undefined && <RecipeView recipes={cookbookDetails.recipes} />}
-        <CommentView
-          comments={cookbookDetails?.comments}
-          handleOpenMenu={handleOpenMenu}
-          anchorElOption={anchorElOption}
-          openOption={openOption}
-          userId={userId}
-          commentId={commentId}
-          handleCloseMenu={handleCloseMenu}
-          handleDeleteComment={handleDeleteComment}
-          handleBlockUser={handleBlockUser}
-        />
+        {cookbookDetails !== undefined && (
+          <CommentView
+            comments={cookbookDetails.comments}
+            handleOpenMenu={handleOpenMenu}
+            anchorElOption={anchorElOption}
+            openOption={openOption}
+            userId={userId}
+            commentId={commentId}
+            handleCloseMenu={handleCloseMenu}
+            handleDeleteComment={handleDeleteComment}
+            handleBlockUser={handleBlockUser}
+          />
+        )}
       </Paper>
     </>
   );

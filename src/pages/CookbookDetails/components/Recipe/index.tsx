@@ -12,7 +12,7 @@ interface IRecipeView {
 export const RecipeView = ({ recipes }: IRecipeView) => (
   <Box>
     <Box>
-      <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: "30px", md: "36px" } }} gutterBottom>
+      <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: 30, md: 36 } }} gutterBottom>
         Recipes
       </Typography>
     </Box>
@@ -45,9 +45,9 @@ export const RecipeView = ({ recipes }: IRecipeView) => (
               alignItems: { xs: "center", md: "none" },
             }}
           >
-            <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: "24px" }}>{title}</Typography>
-            <Typography sx={{ fontSize: "12px", mb: 2 }}>{author}</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{description}</Typography>
+            <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: 24 }}>{title}</Typography>
+            <Typography sx={{ fontSize: 12, mb: 2 }}>{author}</Typography>
+            <Typography sx={{ fontSize: 14 }}>{description}</Typography>
             <Box sx={{ display: "flex", mt: 2, flexDirection: { xs: "column", md: "row" } }}>
               <Box
                 sx={{
@@ -59,7 +59,7 @@ export const RecipeView = ({ recipes }: IRecipeView) => (
                 }}
               >
                 <FavoriteBorderIcon sx={{ mr: 1, fontSize: 15 }} />
-                <Typography sx={{ fontSize: 16 }}>{likes?.length} likes</Typography>
+                <Typography sx={{ fontSize: 16 }}>{likes.length} likes</Typography>
               </Box>
               <Box
                 sx={{
@@ -71,7 +71,7 @@ export const RecipeView = ({ recipes }: IRecipeView) => (
                 }}
               >
                 <ChatBubbleOutlineIcon sx={{ mr: 1, fontSize: 15 }} />
-                <Typography sx={{ fontSize: 16 }}>{comments?.length} comments</Typography>
+                <Typography sx={{ fontSize: 16 }}>{comments.length} comments</Typography>
               </Box>
               <Box
                 sx={{

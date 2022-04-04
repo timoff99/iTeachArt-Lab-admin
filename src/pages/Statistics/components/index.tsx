@@ -73,13 +73,13 @@ export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStati
           <Grid item sx={{ mt: 3 }} key={index} xs={12} sm={12} md={3}>
             <Card sx={{ borderRadius: 5, p: 1 }}>
               <Box sx={{ p: 2 }}>
-                <Typography gutterBottom sx={{ fontSize: "20px", fontWeight: "fontWeightBold" }}>
+                <Typography gutterBottom sx={{ fontSize: 20, fontWeight: "fontWeightBold" }}>
                   {title}
                 </Typography>
                 <Typography>{views}</Typography>
                 <CardMedia component="img" height="140" sx={{ borderRadius: "8px" }} image={image} alt="green iguana" />
-                <Typography sx={{ mt: 1, fontSize: "20px", fontWeight: "fontWeightMedium" }}>{cardName}</Typography>
-                <Typography sx={{ fontSize: "12px" }}>{author}</Typography>
+                <Typography sx={{ mt: 1, fontSize: 20, fontWeight: "fontWeightMedium" }}>{cardName}</Typography>
+                <Typography sx={{ fontSize: 12 }}>{author}</Typography>
               </Box>
             </Card>
           </Grid>

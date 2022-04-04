@@ -23,6 +23,9 @@ export const RecipeDetailsContainer = () => {
     try {
       const id = location.pathname.slice(location.pathname.lastIndexOf("/") + 1);
       const getRecipeDetails = await RecipeService.getRecipe(id);
+      if (!getRecipeDetails) {
+        throw new Error("recipes details not found!");
+      }
       setRecipeDetails(getRecipeDetails.data);
     } catch (error) {
       console.log(error);
@@ -59,34 +62,38 @@ export const RecipeDetailsContainer = () => {
 
   return (
     <>
-      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "22px" }} gutterBottom>
+      <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
         Recipes
       </Typography>
       <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-        <RecipeView
-          title={recipeDetails?.title}
-          author={recipeDetails?.author}
-          description={recipeDetails?.description}
-          ingredients={recipeDetails?.ingredients}
-          steps={recipeDetails?.steps}
-          likes={recipeDetails?.likes.length}
-          comments={recipeDetails?.comments.length}
-          views={recipeDetails?.views}
-          image={recipeDetails?.image}
-          navigation={navigation}
-          location={location}
-        />
-        <CommentView
-          comments={recipeDetails?.comments}
-          handleOpenMenu={handleOpenMenu}
-          anchorElOption={anchorElOption}
-          openOption={openOption}
-          userId={userId}
-          commentId={commentId}
-          handleCloseMenu={handleCloseMenu}
-          handleDeleteComment={handleDeleteComment}
-          handleBlockUser={handleBlockUser}
-        />
+        {recipeDetails !== undefined && (
+          <RecipeView
+            title={recipeDetails.title}
+            author={recipeDetails.author}
+            description={recipeDetails.description}
+            ingredients={recipeDetails.ingredients}
+            steps={recipeDetails.steps}
+            likes={recipeDetails.likes.length}
+            comments={recipeDetails.comments.length}
+            views={recipeDetails.views}
+            image={recipeDetails.image}
+            navigation={navigation}
+            location={location}
+          />
+        )}
+        {recipeDetails !== undefined && (
+          <CommentView
+            comments={recipeDetails.comments}
+            handleOpenMenu={handleOpenMenu}
+            anchorElOption={anchorElOption}
+            openOption={openOption}
+            userId={userId}
+            commentId={commentId}
+            handleCloseMenu={handleCloseMenu}
+            handleDeleteComment={handleDeleteComment}
+            handleBlockUser={handleBlockUser}
+          />
+        )}
       </Paper>
     </>
   );

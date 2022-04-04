@@ -1,5 +1,15 @@
 import { createTheme } from "@mui/material";
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    fontSizeArr: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    fontSizeArr?: PaletteOptions["primary"];
+  }
+}
 export const theme = createTheme({
   typography: {
     fontFamily: ["Nunito"].join(","),
