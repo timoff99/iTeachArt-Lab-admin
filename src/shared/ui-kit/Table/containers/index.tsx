@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { tableData } from "shared/interfaces/Table";
 import { Order } from "shared/types/table";
@@ -19,6 +20,8 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
 
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
   const [userId, setUserId] = useState<string>("");
+  const navigation = useNavigate();
+  const location = useLocation();
   const openOption = Boolean(anchorElOption);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, _id: string) => {
     event.stopPropagation();
@@ -35,7 +38,8 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
   };
 
   const handleOpenDetailsPage = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => {
-    handleDelete(event, _id);
+    event.stopPropagation();
+    navigation(`${location.pathname}/${_id}`);
     handleCloseMenu();
   };
 

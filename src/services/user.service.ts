@@ -20,4 +20,7 @@ export default class UserService {
   static async updateUserStatus(_id: string, user_status: string) {
     return api.put(ApiRoutes.updateUserStatus, { _id, user_status });
   }
+  static async deleteUser(_id: string) {
+    return api.delete(ApiRoutes.deleteUser, { params: { _id } });
+  }
 }

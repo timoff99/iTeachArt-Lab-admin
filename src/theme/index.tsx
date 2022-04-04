@@ -4,6 +4,9 @@ export const theme = createTheme({
   typography: {
     fontFamily: ["Nunito"].join(","),
     fontWeightMedium: 600,
+    h1: {
+      fontSize: 53,
+    },
     h2: {
       fontSize: 26,
     },
