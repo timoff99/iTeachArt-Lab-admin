@@ -21,6 +21,9 @@ export const UserTableContainer = ({ status }: { status: string }) => {
       } else {
         getAllUser = await UserService.getAllUsers("", orderValue, orderByValue);
       }
+      if (!getAllUser) {
+        throw new Error("allUsers not found!");
+      }
       setAllUsers(getAllUser.data.allUsers);
     } catch (error) {
       console.log(error);

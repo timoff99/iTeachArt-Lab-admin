@@ -30,6 +30,7 @@ module.exports = {
     "@typescript-eslint",
   ],
   rules: {
+    "react/react-in-jsx-scope": "off",
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/dot-notation": "error",
     "@typescript-eslint/explicit-member-accessibility": [

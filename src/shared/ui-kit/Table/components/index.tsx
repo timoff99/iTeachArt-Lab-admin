@@ -150,7 +150,9 @@ export const TableView = ({
                           onClose={handleCloseMenu}
                         >
                           <MenuItem onClick={(event) => handleOpenDetailsPage(event, userId)}>View</MenuItem>
-                          <MenuItem onClick={(event) => handleDeleteRow(event, userId)}>Delete</MenuItem>
+                          <MenuItem color="error" onClick={(event) => handleDeleteRow(event, userId)}>
+                            Delete
+                          </MenuItem>
                         </Menu>
                       </TableCell>
                     </TableRow>

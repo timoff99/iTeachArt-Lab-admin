@@ -10,6 +10,7 @@ import { StatisticsContainer } from "pages/Statistics/containers";
 import { RecipesContainer } from "pages/Recipes/containers";
 import { CookbookContainer } from "pages/Cookbooks/containers";
 import { CookbookDetailsContainer } from "pages/CookbookDetails/containers";
+import { RecipeDetailsContainer } from "pages/RecipeDetails/containers";
 
 export const Router = () => {
   return (
@@ -21,6 +22,7 @@ export const Router = () => {
         <Route path={ROUTE_NAMES.COOKBOOKS} element={<CookbookContainer />} />
         <Route path={ROUTE_NAMES.COOKBOOKSID} element={<CookbookDetailsContainer />} />
         <Route path={ROUTE_NAMES.RECIPES} element={<RecipesContainer />} />
+        <Route path={ROUTE_NAMES.RECIPESID} element={<RecipeDetailsContainer />} />
       </Route>
     </Routes>
   );

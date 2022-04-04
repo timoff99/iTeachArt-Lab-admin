@@ -2,32 +2,31 @@ import { useEffect, useState } from "react";
 import { Paper, Typography } from "@mui/material";
 
 import UserService from "services/user.service";
-import { cookbookData } from "shared/interfaces/DetailsPage";
+import { recipeData } from "shared/interfaces/DetailsPage";
 
 import { CommentView } from "shared/ui-kit/Comment";
-import { CookbookView } from "../components/Cookbook";
 import { RecipeView } from "../components/Recipe";
 import { useLocation, useNavigate } from "react-router-dom";
-import CookBookService from "services/cookbook.service";
 import CookbookCommentService from "services/cookbookComment";
+import RecipeService from "services/recipe.service";
 
-export const CookbookDetailsContainer = () => {
+export const RecipeDetailsContainer = () => {
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
   const [userId, setUserId] = useState<string>("");
   const [commentId, setCommentId] = useState<string>("");
   const openOption = Boolean(anchorElOption);
-  const [cookbookDetails, setCookbookDetails] = useState<cookbookData | undefined>();
+  const [recipeDetails, setRecipeDetails] = useState<recipeData>();
   const navigation = useNavigate();
   const location = useLocation();
 
   const TryGetCookbook = async () => {
     try {
       const id = location.pathname.slice(location.pathname.lastIndexOf("/") + 1);
-      const getCookbookDetails = await CookBookService.getCookbook(id);
-      if (!getCookbookDetails) {
-        throw new Error("cookbook not found!");
+      const getRecipeDetails = await RecipeService.getRecipe(id);
+      if (!getRecipeDetails) {
+        throw new Error("recipes details not found!");
       }
-      setCookbookDetails(getCookbookDetails.data);
+      setRecipeDetails(getRecipeDetails.data);
     } catch (error) {
       console.log(error);
     }
@@ -64,25 +63,27 @@ export const CookbookDetailsContainer = () => {
   return (
     <>
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
-        Cookbooks
+        Recipes
       </Typography>
       <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-        {cookbookDetails !== undefined && (
-          <CookbookView
-            title={cookbookDetails.title}
-            author={cookbookDetails.author}
-            description={cookbookDetails.description}
-            likes={cookbookDetails.likes.length}
-            comments={cookbookDetails.comments.length}
-            views={cookbookDetails.views}
-            image={cookbookDetails.image}
+        {recipeDetails !== undefined && (
+          <RecipeView
+            title={recipeDetails.title}
+            author={recipeDetails.author}
+            description={recipeDetails.description}
+            ingredients={recipeDetails.ingredients}
+            steps={recipeDetails.steps}
+            likes={recipeDetails.likes.length}
+            comments={recipeDetails.comments.length}
+            views={recipeDetails.views}
+            image={recipeDetails.image}
             navigation={navigation}
+            location={location}
           />
         )}
-        {cookbookDetails !== undefined && <RecipeView recipes={cookbookDetails.recipes} />}
-        {cookbookDetails !== undefined && (
+        {recipeDetails !== undefined && (
           <CommentView
-            comments={cookbookDetails.comments}
+            comments={recipeDetails.comments}
             handleOpenMenu={handleOpenMenu}
             anchorElOption={anchorElOption}
             openOption={openOption}
