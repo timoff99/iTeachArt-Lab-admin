@@ -4,9 +4,11 @@ export enum ApiUrl {
 
 export enum ApiRoutes {
   login = "auth/login",
+  addImage = "image/create",
   getAllUsers = "user/get-all-users",
   getUser = "user/get-user",
   updateUserStatus = "user/update-user-status",
+  updateUser = "user/update-user",
   getCookbook = "cookbook/get",
   getRecipe = "recipe/get",
   getCookbookStatistics = "cookbook/get-cookbook-statistics",
@@ -18,6 +20,9 @@ export enum ApiRoutes {
   deleteRecipe = "recipe/delete",
   deleteUser = "user/delete",
   deleteCookbookComment = "cookbook-comments/delete",
+  deleteRecipeComment = "recipe-comments/delete",
+  deleteCookbookCommentsId = "cookbook/delete-comments-id",
+  deleteRecipesCommentsId = "recipe/delete-comments-id",
 }
 
 export enum CookiesType {

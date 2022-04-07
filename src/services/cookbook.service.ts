@@ -11,10 +11,13 @@ export default class CookBookService {
   static async getCookbookStatistics() {
     return api.get(ApiRoutes.getCookbookStatistics);
   }
-  static async getAllSortedCookbooks(order: Order = "asc", orderBy: keyof tableData = "title") {
-    return api.get(ApiRoutes.getAllSortedCookbooks, { params: { order, orderBy } });
+  static async getAllSortedCookbooks(order: Order = "asc", orderBy: keyof tableData = "title", search: string) {
+    return api.get(ApiRoutes.getAllSortedCookbooks, { params: { order, orderBy, search } });
   }
   static async deleteCookbook(_id: string) {
     return api.delete(ApiRoutes.deleteCookbook, { params: { _id } });
+  }
+  static async deleteCookBookCommentsId(card_id: string, comment_id: string) {
+    return api.delete(ApiRoutes.deleteCookbookCommentsId, { params: { card_id, comment_id } });
   }
 }

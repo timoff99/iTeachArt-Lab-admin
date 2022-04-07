@@ -6,4 +6,8 @@ export interface tableData {
   likes: string[];
   comments: string[];
   image: string;
+  user_id: {
+    username: string;
+    image: string;
+  };
 }

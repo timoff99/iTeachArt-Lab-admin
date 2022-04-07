@@ -52,13 +52,13 @@ const headCells: readonly HeadCell[] = [
 interface EnhancedTableProps {
   order: Order;
   orderBy: keyof userData;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof userData) => void;
+  onRequestSort: (property: keyof userData) => void;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property: keyof userData) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
+    onRequestSort(property);
   };
 
   return (
@@ -83,7 +83,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface IUserTableProps {
   order: Order;
   orderBy: keyof userData;
-  handleRequestSort: (event: React.MouseEvent<unknown>, property: keyof userData) => void;
+  handleRequestSort: (property: keyof userData) => void;
   allUsers: userData[];
   page: number;
   rowsPerPage: number;
@@ -91,7 +91,7 @@ interface IUserTableProps {
   anchorElOption: HTMLElement | null;
   openOption: boolean;
   handleCloseMenu: () => void;
-  handleUpdateUserStatus: (_id: string, user_status: string) => Promise<void>;
+  handleUpdateUserStatus: (_id: string, user_status: string) => void;
   userId: string;
   emptyRows: number;
   handleChangePage: (event: unknown, newPage: number) => void;
@@ -125,7 +125,7 @@ export const UserTableView = ({
               {allUsers.length > 0 &&
                 allUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row._id} onClick={() => console.log(1)}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                       <TableCell sx={{ display: "flex", alignItems: "center" }}>
                         <Box sx={{ mr: 2 }}>
                           <img

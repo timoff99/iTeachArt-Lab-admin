@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
 
 import {
@@ -30,7 +30,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { ReactComponent as Logo } from "static/icons/Dashboard-logo.svg";
 import { menu } from "../mockData";
 
-import { UserContext } from "shared/ui-kit/UserProvider";
+import { IAuthUser } from "shared/ui-kit/UserProvider";
+import { ROUTE_NAMES } from "router/routeNames";
 
 interface Scroll {
   window?: () => Window;
@@ -38,33 +39,29 @@ interface Scroll {
 }
 const drawerWidth = 240;
 
-const UserProfile = () => {
-  const context = useContext(UserContext);
-
-  return (
-    <Box sx={{ display: "flex", backgroundColor: "common.white", borderRadius: "10px", pr: 2 }}>
-      {context?.user ? (
-        <>
-          <Avatar alt="Remy Sharp" src={context?.user?.image} variant="rounded" sx={{ width: 56, height: 56 }} />
-          <Box sx={{ display: "flex", flexDirection: "column", ml: 2, justifyContent: "center" }}>
-            <Typography color="black">{context?.user?.username}</Typography>
-            <Typography color="grey.600" fontSize={14}>
-              {context?.user?.roles.value}
-            </Typography>
-          </Box>
-        </>
-      ) : (
-        <>
-          <Skeleton variant="rectangular" width={50} height={50} />
-          <Box sx={{ display: "flex", flexDirection: "column", ml: 2, justifyContent: "center" }}>
-            <Skeleton width={50} />
-            <Skeleton />
-          </Box>
-        </>
-      )}
-    </Box>
-  );
-};
+const UserProfile = ({ user }: { user: IAuthUser | null }) => (
+  <Box sx={{ display: "flex", backgroundColor: "common.white", borderRadius: "10px", pr: 2 }}>
+    {user ? (
+      <>
+        <Avatar alt="Remy Sharp" src={user?.image} variant="rounded" sx={{ width: 56, height: 56 }} />
+        <Box sx={{ display: "flex", flexDirection: "column", ml: 2, justifyContent: "center" }}>
+          <Typography color="black">{user?.username}</Typography>
+          <Typography color="grey.600" fontSize={14}>
+            {user?.roles.value}
+          </Typography>
+        </Box>
+      </>
+    ) : (
+      <>
+        <Skeleton variant="rectangular" width={50} height={50} />
+        <Box sx={{ display: "flex", flexDirection: "column", ml: 2, justifyContent: "center" }}>
+          <Skeleton width={50} />
+          <Skeleton />
+        </Box>
+      </>
+    )}
+  </Box>
+);
 
 function HideOnScroll(props: Scroll) {
   const { children, window } = props;
@@ -132,13 +129,26 @@ interface IHomeViewProps {
   handleDrawerToggle: () => void;
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseUserMenu: () => void;
+  logout: () => void;
   anchorElUser: HTMLElement | null;
   container: (() => HTMLElement) | undefined;
   mobileOpen: boolean;
+  user: IAuthUser | null;
+  handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 export const LayoutView = (
-  { handleDrawerToggle, handleOpenUserMenu, handleCloseUserMenu, anchorElUser, container, mobileOpen }: IHomeViewProps,
+  {
+    handleDrawerToggle,
+    handleOpenUserMenu,
+    handleCloseUserMenu,
+    logout,
+    anchorElUser,
+    container,
+    mobileOpen,
+    user,
+    handleChange,
+  }: IHomeViewProps,
   props: Props
 ) => {
   const drawer = (
@@ -202,15 +212,21 @@ export const LayoutView = (
               <MenuIcon />
             </IconButton>
             <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase placeholder="Search…" />
+              {(location.pathname.includes(ROUTE_NAMES.COOKBOOKS) ||
+                location.pathname.includes(ROUTE_NAMES.RECIPES) ||
+                location.pathname === "/") && (
+                <>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase placeholder="Search…" onChange={handleChange} />
+                </>
+              )}
             </Search>
 
             <UserProfileWrapper>
               <Button onClick={handleOpenUserMenu}>
-                <UserProfile />
+                <UserProfile user={user} />
               </Button>
               <Menu
                 id="menu-appbar"
@@ -222,7 +238,7 @@ export const LayoutView = (
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem onClick={logout} sx={{ width: "165px" }}>
                   <Typography textAlign="center" sx={{ width: "100%" }}>
                     Log out
                   </Typography>

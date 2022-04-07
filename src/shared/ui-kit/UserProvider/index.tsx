@@ -4,7 +4,7 @@ type IUserProviderProps = {
   children: JSX.Element | React.ReactNode;
 };
 
-type IAuthUser = {
+export type IAuthUser = {
   _id: string;
   email: string;
   password: string;
@@ -21,11 +21,21 @@ type IAuthUser = {
 export type IUserContextProviderProps = {
   user: IAuthUser | null;
   setUser: React.Dispatch<React.SetStateAction<IAuthUser | null>>;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const UserContext = createContext<IUserContextProviderProps | null>(null);
+const defaultValue = {
+  user: null,
+  setUser: () => {},
+  search: "",
+  setSearch: () => {},
+};
+
+export const UserContext = createContext<IUserContextProviderProps>(defaultValue);
 
 export const UserProvider = ({ children }: IUserProviderProps) => {
   const [user, setUser] = useState<IAuthUser | null>(null);
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  const [search, setSearch] = useState<string>("");
+  return <UserContext.Provider value={{ user, setUser, search, setSearch }}>{children}</UserContext.Provider>;
 };

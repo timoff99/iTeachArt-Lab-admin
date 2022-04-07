@@ -3,20 +3,19 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import { Location, NavigateFunction } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 interface IRecipeView {
-  title: string | undefined;
-  author: string | undefined;
-  description: string | undefined;
-  ingredients: string[] | undefined;
-  steps: string[] | undefined;
-  likes: number | undefined;
-  comments: number | undefined;
-  views: number | undefined;
-  image: string | undefined;
+  title: string;
+  author: string;
+  description: string;
+  ingredients: string[];
+  steps: string[];
+  likes: number;
+  comments: number;
+  views: number;
+  image: string;
   navigation: NavigateFunction;
-  location: Location;
 }
 
 export const RecipeView = ({
@@ -30,7 +29,6 @@ export const RecipeView = ({
   views,
   image,
   navigation,
-  location,
 }: IRecipeView) => (
   <>
     <Box sx={{ display: "flex", alignItems: "center" }}>
