@@ -5,6 +5,7 @@ export enum ApiUrl {
 export enum ApiRoutes {
   login = "auth/login",
   addImage = "image/create",
+  createCookbookCollection = "cookbook-collection/create",
   getAllUsers = "user/get-all-users",
   getUser = "user/get-user",
   updateUserStatus = "user/update-user-status",

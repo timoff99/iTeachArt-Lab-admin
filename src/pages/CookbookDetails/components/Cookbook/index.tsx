@@ -1,4 +1,4 @@
-import { Location, NavigateFunction } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { Box, Icon, IconButton, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
