@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { AxiosResponse } from "axios";
+import React, { useContext, useState } from "react";
+import { UseMutationResult, useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTE_NAMES } from "router/routeNames";
+import CookBookService from "services/cookbook.service";
+import RecipeService from "services/recipe.service";
 
 import { tableData } from "shared/interfaces/Table";
+import { queryKey } from "shared/types/reactQueryKey";
 import { Order } from "shared/types/table";
+import { UserContext } from "shared/ui-kit/UserProvider";
 
 import { TableView } from "../components";
 
 interface Props {
-  TryGetData: (orderValue?: Order | undefined, orderByValue?: keyof tableData | undefined) => Promise<void>;
-  dataRows: tableData[];
-  handleDelete: (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => Promise<void>;
+  deleteMutation: UseMutationResult<AxiosResponse<any, any>, unknown, string, unknown>;
+  flag: string;
 }
 
-export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) => {
+export const TableContainer = ({ flag, deleteMutation }: Props) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof tableData>("title");
   const [page, setPage] = useState(0);
@@ -22,6 +28,8 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
   const [userId, setUserId] = useState<string>("");
   const navigation = useNavigate();
   const location = useLocation();
+  const { search } = useContext(UserContext);
+
   const openOption = Boolean(anchorElOption);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, _id: string) => {
     event.stopPropagation();
@@ -32,8 +40,8 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
     setAnchorElOption(null);
   };
 
-  const handleDeleteRow = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => {
-    handleDelete(event, _id);
+  const handleDeleteRow = (_id: string) => {
+    deleteMutation.mutate(_id);
     handleCloseMenu();
   };
 
@@ -43,9 +51,23 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
     handleCloseMenu();
   };
 
-  useEffect(() => {
-    TryGetData(order, orderBy);
-  }, []);
+  const {
+    isLoading,
+    isError,
+    data: dataRows,
+  } = useQuery(
+    [queryKey.dataRows, order, orderBy, search],
+    () =>
+      flag === "cookbook"
+        ? CookBookService.getAllSortedCookbooks(order, orderBy, search).then((res) => res.data.allSortedCookbooks)
+        : RecipeService.getAllSortedRecipes(order, orderBy, search).then((res) => res.data.allSortedRecipes),
+    {
+      keepPreviousData: true,
+    }
+  );
+  if (isError) {
+    navigation(ROUTE_NAMES.LOGIN, { replace: true });
+  }
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof tableData) => {
     event.stopPropagation();
@@ -53,7 +75,6 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
     const orderValue = isAsc ? "desc" : "asc";
     setOrder(orderValue);
     setOrderBy(property);
-    TryGetData(orderValue, property);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -69,23 +90,27 @@ export const TableContainer = ({ TryGetData, dataRows, handleDelete }: Props) =>
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataRows.length) : 0;
 
   return (
-    <TableView
-      order={order}
-      orderBy={orderBy}
-      handleRequestSort={handleRequestSort}
-      dataRows={dataRows}
-      page={page}
-      rowsPerPage={rowsPerPage}
-      handleOpenMenu={handleOpenMenu}
-      anchorElOption={anchorElOption}
-      openOption={openOption}
-      handleCloseMenu={handleCloseMenu}
-      handleDeleteRow={handleDeleteRow}
-      handleOpenDetailsPage={handleOpenDetailsPage}
-      userId={userId}
-      emptyRows={emptyRows}
-      handleChangePage={handleChangePage}
-      handleChangeRowsPerPage={handleChangeRowsPerPage}
-    />
+    <>
+      {!isLoading && (
+        <TableView
+          order={order}
+          orderBy={orderBy}
+          handleRequestSort={handleRequestSort}
+          dataRows={dataRows}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          handleOpenMenu={handleOpenMenu}
+          anchorElOption={anchorElOption}
+          openOption={openOption}
+          handleCloseMenu={handleCloseMenu}
+          handleDeleteRow={handleDeleteRow}
+          handleOpenDetailsPage={handleOpenDetailsPage}
+          userId={userId}
+          emptyRows={emptyRows}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      )}
+    </>
   );
 };

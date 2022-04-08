@@ -6,7 +6,7 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import { IRecipe } from "shared/interfaces/DetailsPage";
 
 interface IRecipeView {
-  recipes: IRecipe[] | undefined;
+  recipes: IRecipe[];
 }
 
 export const RecipeView = ({ recipes }: IRecipeView) => (

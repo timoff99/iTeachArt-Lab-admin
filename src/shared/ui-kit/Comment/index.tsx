@@ -1,5 +1,7 @@
+import moment from "moment-timezone";
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+
 import { IComment, ICommentProps } from "shared/interfaces/DetailsPage";
 
 export const CommentView = ({
@@ -32,7 +34,7 @@ export const CommentView = ({
                 {user_id.username}
               </Typography>
               <Typography sx={{ mr: 2, fontSize: { xs: 10, md: 12 } }} color="grey.600">
-                {time}
+                {moment(time).fromNow()}
               </Typography>
             </Box>
             <Box sx={{ fontSize: { xs: 14, md: 16 } }}>{message}</Box>

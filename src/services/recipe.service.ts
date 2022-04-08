@@ -11,10 +11,13 @@ export default class RecipeService {
   static async getRecipeStatistics() {
     return api.get(ApiRoutes.getRecipeStatistics);
   }
-  static async getAllSortedRecipes(order: Order = "asc", orderBy: keyof tableData = "title") {
-    return api.get(ApiRoutes.getAllSortedRecipes, { params: { order, orderBy } });
+  static async getAllSortedRecipes(order: Order = "asc", orderBy: keyof tableData = "title", search: string) {
+    return api.get(ApiRoutes.getAllSortedRecipes, { params: { order, orderBy, search } });
   }
   static async deleteRecipe(_id: string) {
     return api.delete(ApiRoutes.deleteRecipe, { params: { _id } });
+  }
+  static async deleteRecipeCommentsId(card_id: string, comment_id: string) {
+    return api.delete(ApiRoutes.deleteRecipesCommentsId, { params: { card_id, comment_id } });
   }
 }

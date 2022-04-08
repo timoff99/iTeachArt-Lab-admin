@@ -1,37 +1,33 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import Cookies from "js-cookie";
+import debounce from "lodash/debounce";
 
 import { ROUTE_NAMES } from "router/routeNames";
 import UserService from "services/user.service";
+import { CookiesType } from "shared/types/routes";
 import { UserContext } from "shared/ui-kit/UserProvider";
 
 import { LayoutView } from "../components";
+import { queryKey } from "shared/types/reactQueryKey";
 
 interface Props {
   window?: () => Window;
   children?: React.ReactNode;
 }
 export const LayoutContainer = (props: Props) => {
-  const context = useContext(UserContext);
+  const { user, setUser, setSearch } = useContext(UserContext);
   const navigation = useNavigate();
 
-  const TryGetUser = async () => {
-    if (!context?.user?.username) {
-      try {
-        const getUser = await UserService.getUser();
-        if (!getUser) {
-          throw new Error("user not found!");
-        }
-        context?.setUser(getUser.data.user);
-      } catch (error) {
-        return navigation(ROUTE_NAMES.LOGIN, { replace: true });
-      }
-    }
-  };
+  const { isError } = useQuery(queryKey.getUser, () =>
+    UserService.getUser().then((getUser) => setUser(getUser.data.user))
+  );
 
-  useEffect(() => {
-    TryGetUser();
-  }, []);
+  if (isError) {
+    navigation(ROUTE_NAMES.LOGIN, { replace: true });
+    throw new Error("user not found!");
+  }
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -45,20 +41,44 @@ export const LayoutContainer = (props: Props) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const logout = () => {
+    Cookies.remove(CookiesType.token);
+    handleCloseUserMenu();
+    return navigation(ROUTE_NAMES.LOGIN, { replace: true });
+  };
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+  const debouncedChange = debounce((value) => {
+    setSearch(value);
+  }, 500);
+
+  const handleChange = useCallback(
+    (
+      e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement> & {
+        target: HTMLInputElement;
+      }
+    ) => {
+      debouncedChange(e.target.value);
+    },
+    [debouncedChange]
+  );
+
   return (
     <LayoutView
       handleDrawerToggle={handleDrawerToggle}
       handleOpenUserMenu={handleOpenUserMenu}
       handleCloseUserMenu={handleCloseUserMenu}
+      logout={logout}
       anchorElUser={anchorElUser}
       container={container}
       mobileOpen={mobileOpen}
+      user={user}
+      handleChange={handleChange}
     />
   );
 };

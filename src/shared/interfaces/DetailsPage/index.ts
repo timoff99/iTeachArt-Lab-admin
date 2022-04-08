@@ -30,7 +30,7 @@ export interface ICommentProps {
   commentId: string;
   handleCloseMenu: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleDeleteComment: (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => void;
-  handleBlockUser: (_id: string, user_status: string) => Promise<void>;
+  handleBlockUser: (_id: string, user_status: string) => void;
 }
 
 export interface cookbookData {

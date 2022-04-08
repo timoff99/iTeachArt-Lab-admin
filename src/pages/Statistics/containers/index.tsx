@@ -1,4 +1,6 @@
+import { Grid, Skeleton } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useQueries } from "react-query";
 
 import CookBookService from "services/cookbook.service";
 import RecipeService from "services/recipe.service";
@@ -8,7 +10,7 @@ import { StatisticsView } from "../components";
 
 export const StatisticsContainer = () => {
   const [statistics, setStatistics] = useState<Array<{ title: string; value: number }>>([]);
-  const [userStatistics, setUserStatistics] = useState<Array<{ title: string; value: number }>>([]);
+  const [usersStatistics, setUsersStatistics] = useState<Array<{ title: string; value: number }>>([]);
   const [mostActiveUserStatistics, setMostActiveUserStatistics] = useState<
     Array<{ image: string; username: string; value: number; type: string }>
   >([]);
@@ -16,20 +18,27 @@ export const StatisticsContainer = () => {
     Array<{ title: string; views: number; image: string; cardName: string; author: string }>
   >([]);
 
-  const getStatistics = async () => {
-    const [cookbookStatistics, recipeStatistics, userStatistics] = await Promise.all([
-      CookBookService.getCookbookStatistics(),
-      RecipeService.getRecipeStatistics(),
-      UserService.getUserStatistics(),
-    ]);
+  const [
+    { data: cookbookStatistics, isLoading: isLoadingCookbook },
+    { data: recipeStatistics, isLoading: isLoadingRecipe },
+    { data: userStatistics, isLoading: isLoadingUser },
+  ] = useQueries([
+    {
+      queryKey: "cookbookStatistics",
+      queryFn: () => CookBookService.getCookbookStatistics().then((res) => res.data),
+    },
+    { queryKey: "recipeStatistics", queryFn: () => RecipeService.getRecipeStatistics().then((res) => res.data) },
+    { queryKey: "userStatistics", queryFn: () => UserService.getUserStatistics().then((res) => res.data) },
+  ]);
 
-    const cookbookCount = cookbookStatistics.data.cookbookCount;
-    const recipeCount = recipeStatistics.data.recipeCount;
-    const cookbookViews = cookbookStatistics.data.cookbookViews[0].total;
-    const recipeViews = recipeStatistics.data.recipeViews[0].total;
+  const getStatistics = () => {
+    const cookbookCount = cookbookStatistics.cookbookCount;
+    const recipeCount = recipeStatistics.recipeCount;
+    const cookbookViews = cookbookStatistics.cookbookViews[0].total;
+    const recipeViews = recipeStatistics.recipeViews[0].total;
 
-    const mostPopularCookbook = cookbookStatistics.data.mostPopularCookbook[0];
-    const mostPopularRecipe = recipeStatistics.data.mostPopularRecipe[0];
+    const mostPopularCookbook = cookbookStatistics.mostPopularCookbook[0];
+    const mostPopularRecipe = recipeStatistics.mostPopularRecipe[0];
 
     setStatistics([
       { title: "Cookbooks count", value: cookbookCount },
@@ -37,22 +46,22 @@ export const StatisticsContainer = () => {
       { title: "Cookbooks views", value: recipeCount },
       { title: "Recipes views", value: recipeViews },
     ]);
-    setUserStatistics([
-      { title: "All users", value: userStatistics.data.allUsersCount },
-      { title: "Blocked", value: userStatistics.data.blockedUsers },
-      { title: "Deleted", value: userStatistics.data.deletedUsers },
+    setUsersStatistics([
+      { title: "All users", value: userStatistics.allUsersCount },
+      { title: "Blocked", value: userStatistics.blockedUsers },
+      { title: "Deleted", value: userStatistics.deletedUsers },
     ]);
     setMostActiveUserStatistics([
       {
-        image: userStatistics.data.mostActiveCookbookUser[0].image,
-        username: userStatistics.data.mostActiveCookbookUser[0].username,
-        value: userStatistics.data.mostActiveCookbookUser[0].cookbook_id.length,
+        image: userStatistics.mostActiveCookbookUser[0].image,
+        username: userStatistics.mostActiveCookbookUser[0].username,
+        value: userStatistics.mostActiveCookbookUser[0].cookbook_id.length,
         type: "cookbooks",
       },
       {
-        image: userStatistics.data.mostActiveRecipeUser[0].image,
-        username: userStatistics.data.mostActiveRecipeUser[0].username,
-        value: userStatistics.data.mostActiveRecipeUser[0].recipe_id.length,
+        image: userStatistics.mostActiveRecipeUser[0].image,
+        username: userStatistics.mostActiveRecipeUser[0].username,
+        value: userStatistics.mostActiveRecipeUser[0].recipe_id.length,
         type: "recipes",
       },
     ]);
@@ -74,15 +83,36 @@ export const StatisticsContainer = () => {
     ]);
   };
   useEffect(() => {
-    getStatistics();
-  }, []);
+    !isLoadingCookbook && !isLoadingRecipe && !isLoadingUser && getStatistics();
+  }, [isLoadingCookbook, isLoadingRecipe, isLoadingUser]);
 
   return (
-    <StatisticsView
-      statistics={statistics}
-      userStatistics={userStatistics}
-      mostActiveUserStatistics={mostActiveUserStatistics}
-      cardsStatistics={cardsStatistics}
-    />
+    <>
+      {!isLoadingCookbook && !isLoadingRecipe && !isLoadingUser ? (
+        <StatisticsView
+          statistics={statistics}
+          userStatistics={usersStatistics}
+          mostActiveUserStatistics={mostActiveUserStatistics}
+          cardsStatistics={cardsStatistics}
+        />
+      ) : (
+        <>
+          <Grid container spacing={1}>
+            <Grid item xs>
+              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
+            </Grid>
+            <Grid item xs>
+              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
+            </Grid>
+            <Grid item xs>
+              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
+            </Grid>
+            <Grid item xs>
+              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </>
   );
 };
