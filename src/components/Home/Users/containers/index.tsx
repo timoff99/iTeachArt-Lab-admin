@@ -5,6 +5,7 @@ import { ROUTE_NAMES } from "router/routeNames";
 
 import UserService from "services/user.service";
 import { userData } from "shared/interfaces/UserTable";
+import { queryKey } from "shared/types/reactQueryKey";
 import { Order } from "shared/types/table";
 import { UserContext } from "shared/ui-kit/UserProvider";
 
@@ -26,7 +27,7 @@ export const UserTableContainer = ({ status }: { status: string }) => {
     isError,
     data: allUsers,
   } = useQuery(
-    ["allUsers", status, order, orderBy, search],
+    [queryKey.allUsers, status, order, orderBy, search],
     () => UserService.getAllUsers(search, status, order, orderBy).then((getAllUser) => getAllUser.data.allUsers),
     {
       keepPreviousData: true,
@@ -48,7 +49,7 @@ export const UserTableContainer = ({ status }: { status: string }) => {
   const UpdateStatusMutation = useMutation(
     ({ _id, user_status }: { _id: string; user_status: string }) => UserService.updateUserStatus(_id, user_status),
     {
-      onSettled: () => queryClient.invalidateQueries("allUsers"),
+      onSettled: () => queryClient.invalidateQueries(queryKey.allUsers),
     }
   );
 

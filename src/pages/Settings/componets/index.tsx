@@ -9,9 +9,9 @@ interface ISettingsViewProps {
   personName: boolean;
   personEmail: boolean;
   personPassword: boolean;
-  handleOpenNameInput: () => void;
-  handleOpenEmailInput: () => void;
-  handleOpenPasswordInput: () => void;
+  setPersonName: (value: React.SetStateAction<boolean>) => void;
+  setPersonEmail: (value: React.SetStateAction<boolean>) => void;
+  setPersonPassword: (value: React.SetStateAction<boolean>) => void;
   saveNewUserInfo: (
     e: React.KeyboardEvent<HTMLDivElement> & {
       target: HTMLInputElement;
@@ -31,9 +31,9 @@ export const SettingsView = ({
   personName,
   personEmail,
   personPassword,
-  handleOpenNameInput,
-  handleOpenEmailInput,
-  handleOpenPasswordInput,
+  setPersonName,
+  setPersonEmail,
+  setPersonPassword,
   saveNewUserInfo,
   saveNewUserPassword,
   setChangePassword,
@@ -99,7 +99,7 @@ export const SettingsView = ({
           <Button
             variant="text"
             sx={{ ml: 1, alignItems: "center", textTransform: "lowercase", fontSize: "16px" }}
-            onClick={handleOpenNameInput}
+            onClick={() => setPersonName((prev) => !prev)}
           >
             change
           </Button>
@@ -132,7 +132,7 @@ export const SettingsView = ({
           <Button
             variant="text"
             sx={{ ml: 1, alignItems: "center", textTransform: "lowercase", fontSize: "16px" }}
-            onClick={handleOpenEmailInput}
+            onClick={() => setPersonEmail((prev) => !prev)}
           >
             change
           </Button>
@@ -144,7 +144,7 @@ export const SettingsView = ({
             <Button
               variant="outlined"
               sx={{ fontSize: "18px", ml: { xs: 0, md: 5 } }}
-              onClick={handleOpenPasswordInput}
+              onClick={() => setPersonPassword((prev) => !prev)}
             >
               Change password
             </Button>

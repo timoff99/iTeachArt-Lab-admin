@@ -10,6 +10,7 @@ import { CookiesType } from "shared/types/routes";
 import { UserContext } from "shared/ui-kit/UserProvider";
 
 import { LayoutView } from "../components";
+import { queryKey } from "shared/types/reactQueryKey";
 
 interface Props {
   window?: () => Window;
@@ -19,7 +20,9 @@ export const LayoutContainer = (props: Props) => {
   const { user, setUser, setSearch } = useContext(UserContext);
   const navigation = useNavigate();
 
-  const { isError } = useQuery("getUser", () => UserService.getUser().then((getUser) => setUser(getUser.data.user)));
+  const { isError } = useQuery(queryKey.getUser, () =>
+    UserService.getUser().then((getUser) => setUser(getUser.data.user))
+  );
 
   if (isError) {
     navigation(ROUTE_NAMES.LOGIN, { replace: true });

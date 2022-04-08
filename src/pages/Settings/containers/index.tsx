@@ -26,16 +26,6 @@ export const SettingsContainer = () => {
   const { user, setUser } = useContext(UserContext);
   const formData = new FormData();
 
-  const handleOpenNameInput = () => {
-    setPersonName((prev) => !prev);
-  };
-  const handleOpenEmailInput = () => {
-    setPersonEmail((prev) => !prev);
-  };
-  const handleOpenPasswordInput = () => {
-    setPersonPassword((prev) => !prev);
-  };
-
   const successNotify = (msg: string) => {
     return toast.success(msg);
   };
@@ -106,9 +96,9 @@ export const SettingsContainer = () => {
           personName={personName}
           personEmail={personEmail}
           personPassword={personPassword}
-          handleOpenNameInput={handleOpenNameInput}
-          handleOpenEmailInput={handleOpenEmailInput}
-          handleOpenPasswordInput={handleOpenPasswordInput}
+          setPersonName={setPersonName}
+          setPersonEmail={setPersonEmail}
+          setPersonPassword={setPersonPassword}
           saveNewUserInfo={saveNewUserInfo}
           saveNewUserPassword={saveNewUserPassword}
           setChangePassword={setChangePassword}

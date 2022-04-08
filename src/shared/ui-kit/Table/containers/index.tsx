@@ -7,6 +7,7 @@ import CookBookService from "services/cookbook.service";
 import RecipeService from "services/recipe.service";
 
 import { tableData } from "shared/interfaces/Table";
+import { queryKey } from "shared/types/reactQueryKey";
 import { Order } from "shared/types/table";
 import { UserContext } from "shared/ui-kit/UserProvider";
 
@@ -55,7 +56,7 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
     isError,
     data: dataRows,
   } = useQuery(
-    ["dataRows", order, orderBy, search],
+    [queryKey.dataRows, order, orderBy, search],
     () =>
       flag === "cookbook"
         ? CookBookService.getAllSortedCookbooks(order, orderBy, search).then((res) => res.data.allSortedCookbooks)

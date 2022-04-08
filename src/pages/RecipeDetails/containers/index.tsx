@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Paper, Typography } from "@mui/material";
 
@@ -11,6 +11,7 @@ import { recipeData } from "shared/interfaces/DetailsPage";
 import { CommentView } from "shared/ui-kit/Comment";
 import { RecipeView } from "../components/Recipe";
 import { ROUTE_NAMES } from "router/routeNames";
+import { queryKey } from "shared/types/reactQueryKey";
 
 export const RecipeDetailsContainer = () => {
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
@@ -18,12 +19,12 @@ export const RecipeDetailsContainer = () => {
   const [commentId, setCommentId] = useState<string>("");
   const openOption = Boolean(anchorElOption);
   const navigation = useNavigate();
-  const location = useLocation();
   const queryClient = useQueryClient();
+  const params = useParams();
 
-  const id = location.pathname.slice(location.pathname.lastIndexOf("/") + 1);
+  const id = params.id || "";
   const { isError, data: recipeDetails }: { isError?: boolean; data?: recipeData } = useQuery(
-    ["recipeDetails", id],
+    [queryKey.recipeDetails, id],
     () => RecipeService.getRecipe(id).then((getRecipeDetails) => getRecipeDetails.data),
     {
       keepPreviousData: true,
@@ -52,7 +53,7 @@ export const RecipeDetailsContainer = () => {
       RecipeService.deleteRecipeCommentsId(card_id, comment_id)
   );
   const deleteCommentMutation = useMutation((_id: string) => RecipeCommentService.deleteRecipeComment(_id), {
-    onSettled: () => queryClient.invalidateQueries("recipeDetails"),
+    onSettled: () => queryClient.invalidateQueries(queryKey.recipeDetails),
   });
 
   const handleDeleteComment = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => {
@@ -65,7 +66,7 @@ export const RecipeDetailsContainer = () => {
   const UpdateStatusMutation = useMutation(
     ({ _id, user_status }: { _id: string; user_status: string }) => UserService.updateUserStatus(_id, user_status),
     {
-      onSettled: () => queryClient.invalidateQueries("allUsers"),
+      onSettled: () => queryClient.invalidateQueries(queryKey.allUsers),
     }
   );
 
