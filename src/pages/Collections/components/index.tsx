@@ -1,15 +1,37 @@
 import React from "react";
+import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import { UseMutationResult } from "react-query";
 import { Box, Button, Card, Grid, IconButton, Paper, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
-interface Props {}
+interface CollectionViewProps {
+  cookbookCollection: {
+    _id: string;
+    title: string;
+    image: string;
+    cloudinary_id: string;
+    collection: string[];
+  }[];
+  deleteCookbookCollectionMutation: UseMutationResult<
+    AxiosResponse<any, any>,
+    unknown,
+    {
+      collection_id: string;
+      cloudinary_id: string;
+    },
+    unknown
+  >;
+  setId: React.Dispatch<React.SetStateAction<string>>;
+}
 
-export const CollectionsView = () => {
-  const lol = [1, 2, 3, 4, 5, 6, 7, 8];
+export const CollectionsView = ({
+  cookbookCollection,
+  deleteCookbookCollectionMutation,
+  setId,
+}: CollectionViewProps) => {
   const navigation = useNavigate();
-
   return (
     <Box>
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
@@ -39,61 +61,66 @@ export const CollectionsView = () => {
               </Typography>
             </Box>
           </Grid>
-          {lol.map((el, index) => (
-            <Grid item xs={4} sm={4} md={6} lg={4} xl={3} key={index}>
-              <Card
-                sx={{
-                  position: "relative",
-                  pt: `${(540 / 600) * 100}%`,
-                  borderRadius: 3,
-                  background: `url(${"https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg"}) no-repeat center center / cover`,
-                }}
-              >
-                <Box
+          {cookbookCollection &&
+            cookbookCollection.map(({ _id, title, image, cloudinary_id }) => (
+              <Grid item xs={4} sm={4} md={6} lg={4} xl={3} key={_id}>
+                <Card
                   sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
+                    position: "relative",
+                    pt: `${(540 / 600) * 100}%`,
+                    borderRadius: 3,
+                    background: `url(${image}) no-repeat center center / cover`,
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    color="inherit"
+                  <Box
                     sx={{
-                      p: "8px 12px",
-                      background: "white",
-                      alignSelf: "flex-end",
-                      mb: 3,
-                      ml: 3,
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
                     }}
                   >
-                    <Typography sx={{ overflow: "hidden", height: "20px" }} fontWeight="fontWeightMedium">
-                      Popular cookbooks of 2022 year
-                    </Typography>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    sx={{
-                      p: 1,
-                      mt: 2,
-                      mr: 2,
-                      ml: "auto",
-                      borderRadius: "50%",
-                      alignSelf: "flex-start",
-                      background: "white",
-                      minWidth: 40,
-                    }}
-                  >
-                    <DeleteIcon sx={{ color: "black" }} />
-                  </Button>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      sx={{
+                        p: "8px 12px",
+                        background: "white",
+                        alignSelf: "flex-end",
+                        mb: 3,
+                        ml: 3,
+                      }}
+                      onClick={() => {
+                        setId(_id);
+                      }}
+                    >
+                      <Typography sx={{ overflow: "hidden", height: "20px" }} fontWeight="fontWeightMedium">
+                        {title}
+                      </Typography>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      sx={{
+                        p: 1,
+                        mt: 2,
+                        mr: 2,
+                        ml: "auto",
+                        borderRadius: "50%",
+                        alignSelf: "flex-start",
+                        background: "white",
+                        minWidth: 40,
+                      }}
+                      onClick={() => deleteCookbookCollectionMutation.mutate({ collection_id: _id, cloudinary_id })}
+                    >
+                      <DeleteIcon sx={{ color: "black" }} />
+                    </Button>
+                  </Box>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       </Paper>
     </Box>

@@ -4,4 +4,8 @@ export enum queryKey {
   recipeDetails = "recipeDetails",
   getUser = "getUser",
   dataRows = "dataRows",
+  getAllCookbook = "getAllCookbook",
+  getAllRecipes = "getAllRecipes",
+  getAllCookbookCollection = "getAllCookbookCollection",
+  getOneCookbookCollection = "getOneCookbookCollection",
 }
