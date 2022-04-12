@@ -10,7 +10,7 @@ export default class UserService {
     if (user_status) {
       return api.get(ApiRoutes.getAllUsers, { params: { search, status: user_status, order, orderBy } });
     }
-    return api.get(ApiRoutes.getAllUsers, { params: { search, status: undefined, order, orderBy } }); ////.????? там и тут проверки
+    return api.get(ApiRoutes.getAllUsers, { params: { search, status: undefined, order, orderBy } });
   }
   static async getUser() {
     return api.get(ApiRoutes.getUser);

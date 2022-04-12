@@ -11,7 +11,7 @@ interface IRecipeView {
 
 export const RecipeView = ({ recipes }: IRecipeView) => (
   <>
-    {recipes?.length &&
+    {recipes?.length > 0 &&
       recipes?.map(({ title, author, image, likes, comments, views }, index) => (
         <Card
           sx={{

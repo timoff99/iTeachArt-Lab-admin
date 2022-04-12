@@ -8,21 +8,21 @@ interface ICreateCollection {
   collection: string[];
 }
 
-export default class CookbookCollectionService {
-  static async getAllCookbookCollection() {
-    return api.get(ApiRoutes.getAllCookbookCollection);
+export default class RecipeCollectionService {
+  static async getAllRecipeCollection() {
+    return api.get(ApiRoutes.getAllRecipeCollection);
   }
-  static async getOneCookbookCollection(id: string) {
-    return api.get(ApiRoutes.getOneCookbookCollection, { params: { id } });
+  static async getOneRecipeCollection(id: string) {
+    return api.get(ApiRoutes.getOneRecipeCollection, { params: { id } });
   }
   static async createCollection(collectionData: ICreateCollection) {
-    return api.post(ApiRoutes.createCookbookCollection, { collectionData });
+    return api.post(ApiRoutes.createRecipeCollection, { collectionData });
   }
   static async deleteCollection(collection_id: string, cloudinary_id: string) {
-    return api.delete(ApiRoutes.deleteCookbookCollection, { data: { collection_id, cloudinary_id } });
+    return api.delete(ApiRoutes.deleteRecipeCollection, { data: { collection_id, cloudinary_id } });
   }
   static async deleteCollectionFiled(collection_id: string, cloudinary_id: string, collection_filed_id: string) {
-    return api.delete(ApiRoutes.deleteCookbookCollectionFiled, {
+    return api.delete(ApiRoutes.deleteRecipeCollectionFiled, {
       data: { collection_id, cloudinary_id, collection_filed_id },
     });
   }

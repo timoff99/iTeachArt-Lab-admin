@@ -1,41 +1,28 @@
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Icon,
-  IconButton,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import { Autocomplete, Box, Button, Icon, IconButton, TextField, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
+
 import { RecipeView } from "./Recipe";
+import { IRecipe } from "shared/interfaces/DetailsPage";
+import { addCollectionSchema } from "shared/shema/collection";
 
 interface IAddCollectionView {
   navigation: NavigateFunction;
-  handleChangeRadio: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  onSubmit: any;
-  addCollectionSchema: any;
+  initialState: {
+    title: string;
+    file: string;
+    collection: string[];
+  };
+  onSubmit: (values: any) => Promise<true | React.ReactText | undefined>;
   setImage: React.Dispatch<React.SetStateAction<string>>;
   image: string;
-  options: any; //for now
-  collection: any;
-  setCollection: any;
-}
-
-interface IRef {
-  title: string;
-  file: string;
-  collection: string[];
+  readonly options: any[];
+  collection: IRecipe[];
+  setCollection: React.Dispatch<React.SetStateAction<IRecipe[]>>;
 }
 
 const inputStyle = {
@@ -64,10 +51,8 @@ const autocompleteStyle = {
 
 export const AddCollectionView = ({
   navigation,
-  handleChangeRadio,
-  value,
+  initialState,
   onSubmit,
-  addCollectionSchema,
   setImage,
   image,
   options,
@@ -77,7 +62,7 @@ export const AddCollectionView = ({
   return (
     <Box>
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <IconButton sx={{ color: "black", pl: 0 }} onClick={() => navigation(-1)}>
+        <IconButton sx={{ color: "black" }} onClick={() => navigation(-1)}>
           <Icon>
             <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
           </Icon>
@@ -85,32 +70,9 @@ export const AddCollectionView = ({
         <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 20, md: 26 } }}>Return</Typography>
       </Box>
 
-      <Formik
-        initialValues={{
-          title: "",
-          file: "",
-          collection: [] as string[],
-        }}
-        validationSchema={addCollectionSchema}
-        onSubmit={onSubmit}
-      >
+      <Formik initialValues={initialState} validationSchema={addCollectionSchema} onSubmit={onSubmit}>
         {({ values, handleChange, setFieldValue, handleSubmit, resetForm }) => (
           <Form onSubmit={handleSubmit}>
-            <FormControl>
-              <FormLabel id="demo-controlled-radio-buttons-group">Collection type</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={value}
-                onChange={(e) => {
-                  handleChangeRadio(e);
-                  setFieldValue("collection", []);
-                }}
-              >
-                <FormControlLabel value="cookbook" control={<Radio />} label="Cookbook" />
-                <FormControlLabel value="recipe" control={<Radio />} label="Recipe" />
-              </RadioGroup>
-            </FormControl>
             <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: 20, md: 24 }, mt: 3, mb: 2 }}>
               Collection title
             </Typography>
@@ -127,16 +89,18 @@ export const AddCollectionView = ({
             <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: { xs: 20, md: 24 }, mt: 3, mb: 2 }}>
               Collection picture
             </Typography>
-            <label htmlFor="contained-button-file" style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="contained-button-file" style={{ display: "inline-flex", flexDirection: "column" }}>
               <Box
                 sx={{ display: "none" }}
                 id="contained-button-file"
                 component="input"
                 type="file"
                 name="file"
-                onChange={(e: any) => {
-                  setFieldValue("file", e.currentTarget.files[0]);
-                  setImage(URL.createObjectURL(e.currentTarget.files[0]));
+                onChange={(e: React.ChangeEvent) => {
+                  const target = e.target as HTMLInputElement;
+                  const file: File = (target.files as FileList)[0];
+                  setFieldValue("file", file);
+                  setImage(URL.createObjectURL(file));
                 }}
               />
               <Box
@@ -176,11 +140,11 @@ export const AddCollectionView = ({
               disableCloseOnSelect
               id="collection"
               value={collection}
-              onChange={(e: any, value: any) => {
+              onChange={(e: any, value: IRecipe[]) => {
                 setFieldValue("collection", value);
                 setCollection(value);
               }}
-              getOptionLabel={(option: any) => option.title} // TODO: form not {title: string}
+              getOptionLabel={(option: IRecipe) => option.title}
               options={options}
               fullWidth
               renderInput={(params) => (
@@ -226,6 +190,7 @@ export const AddCollectionView = ({
           </Form>
         )}
       </Formik>
+      <ToastContainer theme="colored" />
     </Box>
   );
 };

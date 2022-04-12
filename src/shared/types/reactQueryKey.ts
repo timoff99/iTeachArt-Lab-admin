@@ -8,4 +8,6 @@ export enum queryKey {
   getAllRecipes = "getAllRecipes",
   getAllCookbookCollection = "getAllCookbookCollection",
   getOneCookbookCollection = "getOneCookbookCollection",
+  getAllRecipeCollection = "getAllRecipeCollection",
+  getOneRecipeCollection = "getOneRecipeCollection",
 }

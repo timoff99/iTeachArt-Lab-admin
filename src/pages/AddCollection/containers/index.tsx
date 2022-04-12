@@ -1,45 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import * as yup from "yup";
+import { toast } from "react-toastify";
 import { Box, Paper } from "@mui/material";
 
 import CookBookService from "services/cookbook.service";
 import CookbookCollectionService from "services/cookbookCollection.service";
 import ImageService from "services/image.service";
-
-import { AddCollectionView } from "../components";
-import { queryKey } from "shared/types/reactQueryKey";
-import { ROUTE_NAMES } from "router/routeNames";
 import RecipeService from "services/recipe.service";
+import RecipeCollectionService from "services/recipeCollection.service";
 
-const addCollectionSchema = yup.object().shape({
-  title: yup.string().trim().required(),
-  file: yup.mixed().required("File is required"),
-  collection: yup.array().min(1, "collection is required"),
-});
-
-interface IRef {
-  title: string;
-  file: string;
-  collection: string[];
-}
-
-// type ILogin = yup.InferType<typeof addCollectionSchema>;
+import { CustomError } from "shared/interfaces/CustomError";
+import { IRecipe } from "shared/interfaces/DetailsPage";
+import { ICollection } from "shared/types/collection";
+import { queryKey } from "shared/types/reactQueryKey";
+import { AddCollectionView } from "../components";
+import { ROUTE_NAMES } from "router/routeNames";
 
 export const AddCollectionContainer = () => {
   const [image, setImage] = useState("");
-  const [value, setValue] = useState("cookbook");
-  const [collection, setCollection] = useState([]);
-  const [options, setOptions] = useState<any>([]); //for now, but [{_id:string, title: sting, and more img, description:string, likes, comments, views}]
+  const [collection, setCollection] = useState<IRecipe[]>([]);
+  const [options, setOptions] = useState<any>([]);
   const navigation = useNavigate();
+  const { collectionType } = useParams();
   const formData = new FormData();
   const queryClient = useQueryClient();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
+  const initialState = {
+    title: "",
+    file: "",
+    collection: [] as string[],
   };
-
   const createCookbookCollectionMutation = useMutation(
     ({
       collectionData,
@@ -47,6 +38,15 @@ export const AddCollectionContainer = () => {
       collectionData: { title: string; image: string; cloudinary_id: string; collection: string[] };
     }) => CookbookCollectionService.createCollection(collectionData),
     { onSuccess: () => queryClient.invalidateQueries(queryKey.getAllCookbookCollection) }
+  );
+
+  const createRecipeCollectionMutation = useMutation(
+    ({
+      collectionData,
+    }: {
+      collectionData: { title: string; image: string; cloudinary_id: string; collection: string[] };
+    }) => RecipeCollectionService.createCollection(collectionData),
+    { onSuccess: () => queryClient.invalidateQueries(queryKey.getAllRecipeCollection) }
   );
 
   const { data: getCookbookQuery, isLoading: loadingCookbooks } = useQuery(queryKey.getAllCookbook, () =>
@@ -57,10 +57,10 @@ export const AddCollectionContainer = () => {
   );
 
   useEffect(() => {
-    value === "cookbook" && !loadingCookbooks && setOptions(getCookbookQuery);
-    value === "recipe" && !loadingRecipe && setOptions(getRecipeQuery);
+    collectionType === "cookbook" && !loadingCookbooks && setOptions(getCookbookQuery);
+    collectionType === "recipe" && !loadingRecipe && setOptions(getRecipeQuery);
     setCollection([]);
-  }, [value, loadingCookbooks, loadingRecipe]);
+  }, [collectionType, loadingCookbooks, loadingRecipe]);
 
   const createImage = async (fileImage: File) => {
     try {
@@ -73,43 +73,58 @@ export const AddCollectionContainer = () => {
     return true;
   };
 
-  const onSubmit = async (values: any) => {
-    console.log(values);
+  const successNotify = (msg: string) => {
+    return toast.success(msg);
+  };
+
+  const errorNotify = (errors: { message: string }) => {
+    if (errors?.message) {
+      return toast.error(errors.message);
+    }
+  };
+
+  const onSubmit = async (values: ICollection) => {
     try {
       const newImage: { secure_url: string; public_id: string } = await createImage(values.file);
       formData.append("image", values.file);
       console.log(newImage);
-      const collectionId = values.collection.map(({ _id }: { _id: string }) => _id);
+      const collectionId = values?.collection?.map(({ _id }: { _id: string }) => _id);
       const collectionData = {
         title: values.title,
         image: newImage.secure_url,
         cloudinary_id: newImage.public_id,
-        collection: collectionId,
+        collection: collectionId as string[],
       };
-      createCookbookCollectionMutation.mutate({ collectionData });
+
+      if (collectionType === "cookbook") {
+        createCookbookCollectionMutation.mutate({ collectionData });
+      } else if (collectionType === "recipe") {
+        createRecipeCollectionMutation.mutate({ collectionData });
+      }
+      successNotify("collection created");
       navigation(ROUTE_NAMES.COLLECTIONS);
       return true;
     } catch (error) {
-      // return false;
+      return errorNotify((error as CustomError).response.data);
     }
   };
 
   return (
     <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-      <Box>
-        <AddCollectionView
-          navigation={navigation}
-          handleChangeRadio={handleChange}
-          value={value}
-          onSubmit={onSubmit}
-          addCollectionSchema={addCollectionSchema}
-          image={image}
-          setImage={setImage}
-          options={options}
-          collection={collection}
-          setCollection={setCollection}
-        />
-      </Box>
+      {collectionType && (
+        <Box>
+          <AddCollectionView
+            navigation={navigation}
+            initialState={initialState}
+            onSubmit={onSubmit}
+            image={image}
+            setImage={setImage}
+            options={options}
+            collection={collection}
+            setCollection={setCollection}
+          />
+        </Box>
+      )}
     </Paper>
   );
 };

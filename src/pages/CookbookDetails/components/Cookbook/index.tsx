@@ -1,5 +1,5 @@
 import { NavigateFunction } from "react-router-dom";
-import { Box, Icon, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -28,10 +28,8 @@ export const CookbookView = ({
 }: ICookbookView) => (
   <>
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <IconButton sx={{ color: "black", pl: 0 }} onClick={() => navigation(-1)}>
-        <Icon>
-          <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
-        </Icon>
+      <IconButton sx={{ color: "black" }} onClick={() => navigation(-1)}>
+        <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
       </IconButton>
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 20, md: 26 } }}>Return</Typography>
     </Box>
