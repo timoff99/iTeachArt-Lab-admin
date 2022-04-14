@@ -20,14 +20,17 @@ export const LayoutContainer = (props: Props) => {
   const { user, setUser, setSearch } = useContext(UserContext);
   const navigation = useNavigate();
 
-  const { isError } = useQuery(queryKey.getUser, () =>
-    UserService.getUser().then((getUser) => setUser(getUser.data.user))
+  useQuery(queryKey.getUser, () =>
+    UserService.getUser()
+      .then((getUser) => {
+        if (getUser.data.user.roles.value === "USER") {
+          navigation(ROUTE_NAMES.LOGIN, { replace: true });
+          throw new Error("user login denied!");
+        }
+        return getUser.data.user;
+      })
+      .then((user) => setUser(user))
   );
-
-  if (isError) {
-    navigation(ROUTE_NAMES.LOGIN, { replace: true });
-    throw new Error("user not found!");
-  }
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);

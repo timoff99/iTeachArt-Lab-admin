@@ -1,3 +1,4 @@
+import { Skeleton } from "@mui/material";
 import { AxiosResponse } from "axios";
 import React, { useContext, useState } from "react";
 import { UseMutationResult, useQuery } from "react-query";
@@ -91,7 +92,7 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
 
   return (
     <>
-      {!isLoading && (
+      {!isLoading ? (
         <TableView
           order={order}
           orderBy={orderBy}
@@ -110,6 +111,8 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         />
+      ) : (
+        <Skeleton variant="rectangular" width={"100%"} height={500} sx={{ borderRadius: 3 }} />
       )}
     </>
   );

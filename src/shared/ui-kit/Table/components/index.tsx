@@ -13,6 +13,9 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  AvatarGroup,
+  Avatar,
+  Skeleton,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -127,22 +130,28 @@ export const TableView = ({
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                      <img
-                        style={{ borderRadius: "50%", width: "36px", height: "36px", marginRight: "16px" }}
-                        src={row.image}
-                        alt={"img"}
-                        loading="lazy"
-                      />
+                      {row.image ? (
+                        <Avatar
+                          style={{ borderRadius: "50%", width: "36px", height: "36px", marginRight: "16px" }}
+                          src={row.image}
+                          alt={"img"}
+                        />
+                      ) : (
+                        <Skeleton variant="circular" width="36px" height="36px" />
+                      )}
                       <Box>{row.title}</Box>
                     </TableCell>
                     <TableCell>{row.views}</TableCell>
                     <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                      <img
-                        style={{ borderRadius: "50%", width: "36px", height: "36px", marginRight: "16px" }}
-                        src={row.user_id.image}
-                        alt={"img"}
-                        loading="lazy"
-                      />
+                      {row.image ? (
+                        <Avatar
+                          style={{ borderRadius: "50%", width: "36px", height: "36px", marginRight: "16px" }}
+                          src={row.user_id.image}
+                          alt={"img"}
+                        />
+                      ) : (
+                        <Skeleton variant="circular" width="36px" height="36px" />
+                      )}
                       <Box>{row.user_id.username}</Box>
                     </TableCell>
                     <TableCell>{row.likes.length}</TableCell>

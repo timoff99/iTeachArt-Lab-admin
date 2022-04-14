@@ -1,5 +1,6 @@
 import { FormikHandlers, FormikState } from "formik";
-import { Box, Button, Grid, Paper, TextField, InputLabel, Typography } from "@mui/material";
+import { Box, Grid, Paper, TextField, InputLabel, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { ToastContainer } from "react-toastify";
 
 import { ReactComponent as Logo } from "static/icons/Logo.svg";
@@ -7,6 +8,7 @@ import loginBg from "static/images/loginBg.png";
 
 interface ILoginViewProps {
   formik: FormikState<any> & FormikHandlers;
+  loading: boolean;
 }
 
 const inputStyle = {
@@ -26,7 +28,7 @@ const boxStyle = { background: `url(${loginBg}) no-repeat`, backgroundSize: "cov
 
 const parerStyle = { padding: 70, margin: "100px auto", borderRadius: "16px" };
 
-export const LoginView = ({ formik }: ILoginViewProps) => {
+export const LoginView = ({ formik, loading }: ILoginViewProps) => {
   return (
     <Box style={boxStyle}>
       <Grid container>
@@ -62,11 +64,18 @@ export const LoginView = ({ formik }: ILoginViewProps) => {
               helperText={formik.touched.password && formik.errors.password}
             />
 
-            <Button sx={{ mt: "70px", height: 48 }} type="submit" fullWidth size="large" variant="contained">
+            <LoadingButton
+              sx={{ mt: "70px", height: 48 }}
+              type="submit"
+              fullWidth
+              size="large"
+              variant="contained"
+              loading={loading}
+            >
               <Typography variant="h4" component="span" sx={{ fontWeight: "medium", textTransform: "capitalize" }}>
                 Login
               </Typography>
-            </Button>
+            </LoadingButton>
           </form>
         </Paper>
       </Grid>

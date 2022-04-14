@@ -11,8 +11,11 @@ import { ROUTE_NAMES } from "router/routeNames";
 import { CookiesType } from "shared/types/routes";
 import { loginSchema } from "shared/shema/login";
 import { ILogin } from "shared/types/login";
+import { useState } from "react";
 
 export const LoginContainer = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigation = useNavigate();
 
   const successNotify = (msg: string) => {
@@ -27,6 +30,7 @@ export const LoginContainer = () => {
 
   const onSubmit = async (values: ILogin) => {
     try {
+      setLoading(true);
       const loginData = await AuthService.login(values.email, values.password);
       if (!loginData.data) {
         throw loginData;
@@ -40,6 +44,8 @@ export const LoginContainer = () => {
       return true;
     } catch (error) {
       return errorNotify((error as CustomError).response.data);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,5 +58,5 @@ export const LoginContainer = () => {
     onSubmit,
   });
 
-  return <LoginView formik={formik} />;
+  return <LoginView formik={formik} loading={loading} />;
 };

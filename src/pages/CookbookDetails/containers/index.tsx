@@ -83,18 +83,17 @@ export const CookbookDetailsContainer = () => {
         Cookbooks
       </Typography>
       <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-        {cookbookDetails && (
-          <CookbookView
-            title={cookbookDetails.title}
-            author={cookbookDetails.author}
-            description={cookbookDetails.description}
-            likes={cookbookDetails.likes.length}
-            comments={cookbookDetails.comments.length}
-            views={cookbookDetails.views}
-            image={cookbookDetails.image}
-            navigation={navigation}
-          />
-        )}
+        <CookbookView
+          title={cookbookDetails?.title}
+          author={cookbookDetails?.author}
+          description={cookbookDetails?.description}
+          likes={cookbookDetails?.likes?.length}
+          comments={cookbookDetails?.comments?.length}
+          views={cookbookDetails?.views}
+          image={cookbookDetails?.image}
+          navigation={navigation}
+        />
+
         {cookbookDetails && <RecipeView recipes={cookbookDetails.recipes} />}
         {cookbookDetails && reverseComments && (
           <CommentView
