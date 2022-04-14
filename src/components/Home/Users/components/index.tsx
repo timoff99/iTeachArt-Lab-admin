@@ -15,6 +15,8 @@ import {
   Menu,
   MenuItem,
   alpha,
+  Skeleton,
+  Avatar,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -128,12 +130,15 @@ export const UserTableView = ({
                     <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                       <TableCell sx={{ display: "flex", alignItems: "center" }}>
                         <Box sx={{ mr: 2 }}>
-                          <img
-                            style={{ borderRadius: "50%", width: "36px", height: "36px" }}
-                            src={row.image}
-                            alt={"img"}
-                            loading="lazy"
-                          />
+                          {row.image ? (
+                            <Avatar
+                              sx={{ borderRadius: "50%", width: "36px", height: "36px" }}
+                              src={row.image}
+                              alt={"img"}
+                            />
+                          ) : (
+                            <Skeleton variant="circular" width="36px" height="36px" />
+                          )}
                         </Box>
                         <Box>{row.username}</Box>
                       </TableCell>

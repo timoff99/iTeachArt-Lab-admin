@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { RecipeView } from "./Recipe";
 import { IRecipe } from "shared/interfaces/DetailsPage";
 import { addCollectionSchema } from "shared/shema/collection";
+import { LoadingButton } from "@mui/lab";
 
 interface IAddCollectionView {
   navigation: NavigateFunction;
@@ -23,6 +24,7 @@ interface IAddCollectionView {
   readonly options: any[];
   collection: IRecipe[];
   setCollection: React.Dispatch<React.SetStateAction<IRecipe[]>>;
+  loading: boolean;
 }
 
 const inputStyle = {
@@ -58,6 +60,7 @@ export const AddCollectionView = ({
   options,
   collection,
   setCollection,
+  loading,
 }: IAddCollectionView) => {
   return (
     <Box>
@@ -181,11 +184,17 @@ export const AddCollectionView = ({
                   Cancel
                 </Typography>
               </Button>
-              <Button sx={{ mt: "70px", height: 48, mr: 3 }} type="submit" size="large" variant="contained">
+              <LoadingButton
+                sx={{ mt: "70px", height: 48, mr: 3 }}
+                type="submit"
+                size="large"
+                variant="contained"
+                loading={loading}
+              >
                 <Typography variant="h4" component="span" sx={{ fontWeight: "medium", textTransform: "capitalize" }}>
                   Confirm
                 </Typography>
-              </Button>
+              </LoadingButton>
             </Box>
           </Form>
         )}

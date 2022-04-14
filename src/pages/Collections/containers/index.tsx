@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Paper, Skeleton, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
@@ -141,7 +141,8 @@ export const CollectionsContainer = () => {
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22 }} gutterBottom>
         Cookbook Collections
       </Typography>
-      {!loadingCookbookCollection && (
+
+      {!loadingCookbookCollection ? (
         <CollectionsView
           cookbookCollection={cookbookCollection}
           deleteCookbookCollectionMutation={deleteCookbookCollectionMutation}
@@ -149,11 +150,13 @@ export const CollectionsContainer = () => {
           collectionType={"cookbook"}
           setCurrentId={setCurrentId}
         />
+      ) : (
+        <Skeleton variant="rectangular" height="50%" />
       )}
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: 22, mt: 5 }} gutterBottom>
         Recipe Collections
       </Typography>
-      {!loadingRecipeCollection && (
+      {!loadingRecipeCollection ? (
         <CollectionsView
           cookbookCollection={recipeCollection}
           deleteCookbookCollectionMutation={deleteRecipeCollectionMutation}
@@ -161,6 +164,8 @@ export const CollectionsContainer = () => {
           collectionType={"recipe"}
           setCurrentId={setCurrentId}
         />
+      ) : (
+        <Skeleton variant="rectangular" height="50%" />
       )}
       {cards && (
         <Paper sx={{ p: { xs: 3, md: 1 }, mt: 3 }}>

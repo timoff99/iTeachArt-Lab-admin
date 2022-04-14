@@ -80,20 +80,18 @@ export const RecipeDetailsContainer = () => {
         Recipes
       </Typography>
       <Paper sx={{ p: { xs: 1, md: 2, lg: 4 } }}>
-        {recipeDetails && (
-          <RecipeView
-            title={recipeDetails.title}
-            author={recipeDetails.author}
-            description={recipeDetails.description}
-            ingredients={recipeDetails.ingredients}
-            steps={recipeDetails.steps}
-            likes={recipeDetails.likes.length}
-            comments={recipeDetails.comments.length}
-            views={recipeDetails.views}
-            image={recipeDetails.image}
-            navigation={navigation}
-          />
-        )}
+        <RecipeView
+          title={recipeDetails?.title}
+          author={recipeDetails?.author}
+          description={recipeDetails?.description}
+          ingredients={recipeDetails?.ingredients}
+          steps={recipeDetails?.steps}
+          likes={recipeDetails?.likes?.length}
+          comments={recipeDetails?.comments?.length}
+          views={recipeDetails?.views}
+          image={recipeDetails?.image}
+          navigation={navigation}
+        />
         {recipeDetails && reverseComments && (
           <CommentView
             comments={reverseComments}

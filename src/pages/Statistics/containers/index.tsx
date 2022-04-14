@@ -88,31 +88,12 @@ export const StatisticsContainer = () => {
 
   return (
     <>
-      {!isLoadingCookbook && !isLoadingRecipe && !isLoadingUser ? (
-        <StatisticsView
-          statistics={statistics}
-          userStatistics={usersStatistics}
-          mostActiveUserStatistics={mostActiveUserStatistics}
-          cardsStatistics={cardsStatistics}
-        />
-      ) : (
-        <>
-          <Grid container spacing={1}>
-            <Grid item xs>
-              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
-            </Grid>
-            <Grid item xs>
-              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
-            </Grid>
-            <Grid item xs>
-              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
-            </Grid>
-            <Grid item xs>
-              <Skeleton sx={{ borderRadius: 5 }} variant="rectangular" width={210} height={118} />
-            </Grid>
-          </Grid>
-        </>
-      )}
+      <StatisticsView
+        statistics={statistics}
+        userStatistics={usersStatistics}
+        mostActiveUserStatistics={mostActiveUserStatistics}
+        cardsStatistics={cardsStatistics}
+      />
     </>
   );
 };

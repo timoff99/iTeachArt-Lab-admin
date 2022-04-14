@@ -19,6 +19,7 @@ import { ROUTE_NAMES } from "router/routeNames";
 
 export const AddCollectionContainer = () => {
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [collection, setCollection] = useState<IRecipe[]>([]);
   const [options, setOptions] = useState<any>([]);
   const navigation = useNavigate();
@@ -85,6 +86,7 @@ export const AddCollectionContainer = () => {
 
   const onSubmit = async (values: ICollection) => {
     try {
+      setLoading(true);
       const newImage: { secure_url: string; public_id: string } = await createImage(values.file);
       formData.append("image", values.file);
       console.log(newImage);
@@ -106,6 +108,8 @@ export const AddCollectionContainer = () => {
       return true;
     } catch (error) {
       return errorNotify((error as CustomError).response.data);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,6 +126,7 @@ export const AddCollectionContainer = () => {
             options={options}
             collection={collection}
             setCollection={setCollection}
+            loading={loading}
           />
         </Box>
       )}

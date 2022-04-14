@@ -9,6 +9,7 @@ import { IAuthUser, UserContext } from "shared/ui-kit/UserProvider";
 import { SettingsView } from "../componets";
 import { FormPasswordData, IUpdatedUserFiled } from "shared/interfaces/Settings";
 import { useMutation } from "react-query";
+import { Skeleton } from "@mui/material";
 
 interface IResponseData {
   data: string;
@@ -91,7 +92,7 @@ export const SettingsContainer = () => {
   };
   return (
     <>
-      {user && (
+      {user ? (
         <SettingsView
           personName={personName}
           personEmail={personEmail}
@@ -105,6 +106,8 @@ export const SettingsContainer = () => {
           setImage={setImage}
           user={user}
         />
+      ) : (
+        <Skeleton variant="rectangular" width={"100%"} height={500} sx={{ borderRadius: 2 }} />
       )}
     </>
   );

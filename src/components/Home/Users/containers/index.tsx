@@ -1,3 +1,4 @@
+import { Skeleton } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +79,7 @@ export const UserTableContainer = ({ status }: { status: string }) => {
 
   return (
     <>
-      {!isLoading && (
+      {!isLoading ? (
         <UserTableView
           order={order}
           orderBy={orderBy}
@@ -96,6 +97,8 @@ export const UserTableContainer = ({ status }: { status: string }) => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         />
+      ) : (
+        <Skeleton variant="rectangular" width={"100%"} height={500} sx={{ borderRadius: 3 }} />
       )}
     </>
   );
