@@ -5,6 +5,9 @@ import { Order } from "../shared/types/table";
 import { tableData } from "../shared/interfaces/Table";
 
 export default class RecipeService {
+  static async getAllRecipes() {
+    return api.get(ApiRoutes.getAllRecipes);
+  }
   static async getRecipe(_id: string) {
     return api.get(ApiRoutes.getRecipe, { params: { _id } });
   }

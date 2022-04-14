@@ -5,6 +5,9 @@ import { ApiRoutes } from "../shared/types/routes";
 import { Order } from "../shared/types/table";
 
 export default class CookBookService {
+  static async getAllCookBooks() {
+    return api.get(ApiRoutes.getAllCookBooks);
+  }
   static async getCookbook(_id: string) {
     return api.get(ApiRoutes.getCookbook, { params: { _id } });
   }

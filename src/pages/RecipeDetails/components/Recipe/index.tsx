@@ -32,7 +32,7 @@ export const RecipeView = ({
 }: IRecipeView) => (
   <>
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <IconButton sx={{ color: "black", pl: 0 }} onClick={() => navigation(-1)}>
+      <IconButton sx={{ color: "black" }} onClick={() => navigation(-1)}>
         <Icon>
           <ArrowBackIcon sx={{ fontSize: { xs: 20, md: 26 } }} />
         </Icon>
@@ -54,7 +54,7 @@ export const RecipeView = ({
         alt="img"
         src={image}
       />
-      <Box sx={{ ml: { md: 2, lg: 4 }, flex: 1 }}>
+      <Box sx={{ ml: { md: 2, lg: 4 }, flex: 1, maxWidth: "900px", overflow: "hidden" }}>
         <Box sx={{ mb: 3 }}>
           <Typography sx={{ fontWeight: "fontWeightBold", lineHeight: 1.167, fontSize: { xs: 30, md: 53 } }}>
             {title}
@@ -72,11 +72,11 @@ export const RecipeView = ({
           </Box>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", flex: 1, maxWidth: 300 }}>
             <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Directions
             </Typography>
-            {ingredients?.map((el, index) => (
+            {steps?.map((el, index) => (
               <Box key={index}>
                 <Typography
                   sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 14, md: 16 }, display: "inline-block" }}
@@ -87,11 +87,11 @@ export const RecipeView = ({
               </Box>
             ))}
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", flex: 1, maxWidth: 300 }}>
             <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Ingredients
             </Typography>
-            {steps?.map((el, index) => (
+            {ingredients?.map((el, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   sx={{

@@ -7,5 +7,6 @@ export enum ROUTE_NAMES {
   RECIPES = "/recipes",
   RECIPESID = "/recipes/:id",
   COLLECTIONS = "/collections",
+  ADDCOLLECTION = "/collections/add/:collectionType",
   SETTINGS = "/settings",
 }

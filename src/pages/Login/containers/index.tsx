@@ -1,5 +1,4 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -10,12 +9,8 @@ import { LoginView } from "../components";
 import { CustomError } from "shared/interfaces/CustomError";
 import { ROUTE_NAMES } from "router/routeNames";
 import { CookiesType } from "shared/types/routes";
-
-const loginSchema = yup.object({
-  email: yup.string().email("Enter a valid email").required("Email is required"),
-  password: yup.string().required("Password is required"),
-});
-type ILogin = yup.InferType<typeof loginSchema>;
+import { loginSchema } from "shared/shema/login";
+import { ILogin } from "shared/types/login";
 
 export const LoginContainer = () => {
   const navigation = useNavigate();

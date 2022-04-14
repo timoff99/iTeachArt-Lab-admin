@@ -13,6 +13,7 @@ import { CookbookDetailsContainer } from "pages/CookbookDetails/containers";
 import { RecipeDetailsContainer } from "pages/RecipeDetails/containers";
 import { CollectionsContainer } from "pages/Collections/containers";
 import { SettingsContainer } from "pages/Settings/containers";
+import { AddCollectionContainer } from "pages/AddCollection/containers";
 
 export const Router = () => {
   return (
@@ -26,6 +27,7 @@ export const Router = () => {
         <Route path={ROUTE_NAMES.RECIPES} element={<RecipesContainer />} />
         <Route path={ROUTE_NAMES.RECIPESID} element={<RecipeDetailsContainer />} />
         <Route path={ROUTE_NAMES.COLLECTIONS} element={<CollectionsContainer />} />
+        <Route path={ROUTE_NAMES.ADDCOLLECTION} element={<AddCollectionContainer />} />
         <Route path={ROUTE_NAMES.SETTINGS} element={<SettingsContainer />} />
       </Route>
     </Routes>
