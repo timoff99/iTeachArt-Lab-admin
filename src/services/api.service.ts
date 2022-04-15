@@ -22,6 +22,9 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response.status === 401) {
+      return (window.location.href = ROUTE_NAMES.LOGIN);
+    }
     if (error.response.data.message === "User not authorized") {
       return (window.location.href = ROUTE_NAMES.LOGIN);
     }

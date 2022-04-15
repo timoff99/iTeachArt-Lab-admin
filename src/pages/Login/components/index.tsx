@@ -26,18 +26,25 @@ const inputStyle = {
 
 const boxStyle = { background: `url(${loginBg}) no-repeat`, backgroundSize: "cover", height: "100vh" };
 
-const parerStyle = { padding: 70, margin: "100px auto", borderRadius: "16px" };
+const parerStyle = {
+  padding: { xs: "30px", md: "70px" },
+  margin: "100px auto",
+  borderRadius: "16px",
+  width: "100%",
+  maxWidth: { xs: 560, md: 640 },
+  minWidth: 240,
+};
 
 export const LoginView = ({ formik, loading }: ILoginViewProps) => {
   return (
     <Box style={boxStyle}>
       <Grid container>
-        <Paper elevation={0} style={parerStyle}>
+        <Paper elevation={0} sx={parerStyle}>
           <Logo />
           <Typography variant="h2" mt={5}>
             Login to Admin panel
           </Typography>
-          <form onSubmit={formik.handleSubmit} style={{ width: "500px" }}>
+          <form onSubmit={formik.handleSubmit}>
             <InputLabel sx={{ mt: "50px", mb: "8px" }}>Email</InputLabel>
             <TextField
               sx={{ ...inputStyle }}

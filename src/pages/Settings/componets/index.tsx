@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { ToastContainer } from "react-toastify";
 
 import { IAuthUser } from "shared/ui-kit/UserProvider";
 import { FormPasswordData } from "shared/interfaces/Settings";
@@ -207,6 +206,5 @@ export const SettingsView = ({
         </Box>
       </Box>
     </Paper>
-    <ToastContainer theme="colored" />
   </>
 );

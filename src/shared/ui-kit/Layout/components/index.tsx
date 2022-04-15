@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import {
   Avatar,
@@ -276,10 +277,11 @@ export const LayoutView = (
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: { xs: 1, md: 3 } }}>
         <Toolbar sx={{ mt: 5 }} />
         <Outlet />
       </Box>
+      <ToastContainer theme="colored" />
     </Box>
   );
 };

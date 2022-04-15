@@ -35,6 +35,9 @@ export const SettingsContainer = () => {
       return toast.error(errors.message);
     }
   };
+  const warningNotify = (msg: string) => {
+    return toast.warning(msg);
+  };
 
   const updateUserMutation = useMutation(
     (updatedFiled: { image: string; cloudinary_id: string } | IUpdatedUserFiled) =>
@@ -79,6 +82,16 @@ export const SettingsContainer = () => {
   const saveNewUserPassword = async (e: React.KeyboardEvent<HTMLDivElement> & { target: HTMLInputElement }) => {
     try {
       e.preventDefault();
+      if (
+        changePassword?.oldPassword === undefined ||
+        changePassword?.oldPassword?.trim() === "" ||
+        changePassword?.newPassword === undefined ||
+        changePassword?.newPassword?.trim() === ""
+      ) {
+        setPersonPassword(false);
+        return warningNotify("no password entered");
+      }
+
       const updatedFiled = { ...changePassword };
       const data: CustomAxiosResponse = await UserService.updateUser(updatedFiled);
       if (data?.response?.data) throw data;

@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import { ToastContainer } from "react-toastify";
 import { Autocomplete, Box, Button, Icon, IconButton, TextField, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
@@ -199,7 +198,6 @@ export const AddCollectionView = ({
           </Form>
         )}
       </Formik>
-      <ToastContainer theme="colored" />
     </Box>
   );
 };
