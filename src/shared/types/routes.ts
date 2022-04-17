@@ -1,5 +1,5 @@
 export enum ApiUrl {
-  dev = "http://localhost:5000/api",
+  dev = "http://localhost:5000",
 }
 
 export enum ApiRoutes {

@@ -114,7 +114,6 @@ export const AddCollectionView = ({
                   width: "100%",
                   objectFit: "cover",
                   cursor: "pointer",
-                  mr: 4,
                 }}
                 alt=""
                 src={image}

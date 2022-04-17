@@ -7,9 +7,12 @@ import ImageService from "services/image.service";
 import { IAuthUser, UserContext } from "shared/ui-kit/UserProvider";
 
 import { SettingsView } from "../componets";
-import { FormPasswordData, IUpdatedUserFiled } from "shared/interfaces/Settings";
+import { IUpdatedUserFiled } from "shared/interfaces/Settings";
 import { useMutation } from "react-query";
 import { Skeleton } from "@mui/material";
+import { useFormik } from "formik";
+import { IChangePassword } from "shared/types/changePassword";
+import { changePasswordSchema } from "shared/shema/changePassword";
 
 interface IResponseData {
   data: string;
@@ -23,7 +26,7 @@ export const SettingsContainer = () => {
   const [personName, setPersonName] = useState(false);
   const [personEmail, setPersonEmail] = useState(false);
   const [personPassword, setPersonPassword] = useState(false);
-  const [changePassword, setChangePassword] = useState<FormPasswordData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const { user, setUser } = useContext(UserContext);
   const formData = new FormData();
 
@@ -35,15 +38,16 @@ export const SettingsContainer = () => {
       return toast.error(errors.message);
     }
   };
-  const warningNotify = (msg: string) => {
-    return toast.warning(msg);
-  };
 
   const updateUserMutation = useMutation(
     (updatedFiled: { image: string; cloudinary_id: string } | IUpdatedUserFiled) =>
       UserService.updateUser(updatedFiled),
     {
-      onSuccess: ({ data }: { data: { updateUser: IAuthUser } }) => setUser(data.updateUser),
+      onSuccess: ({ data }: { data: { updateUser: IAuthUser } }) => {
+        setUser(data.updateUser);
+        successNotify("image upload successfully");
+      },
+      onSettled: () => setLoading(false),
     }
   );
 
@@ -55,6 +59,7 @@ export const SettingsContainer = () => {
   });
 
   const setImage = async (e: React.ChangeEvent) => {
+    setLoading(true);
     const target = e.target as HTMLInputElement;
     const file: File = (target.files as FileList)[0];
     formData.append("image", file);
@@ -79,30 +84,32 @@ export const SettingsContainer = () => {
     }
   };
 
-  const saveNewUserPassword = async (e: React.KeyboardEvent<HTMLDivElement> & { target: HTMLInputElement }) => {
+  const saveNewUserPassword = async (values: IChangePassword) => {
     try {
-      e.preventDefault();
-      if (
-        changePassword?.oldPassword === undefined ||
-        changePassword?.oldPassword?.trim() === "" ||
-        changePassword?.newPassword === undefined ||
-        changePassword?.newPassword?.trim() === ""
-      ) {
-        setPersonPassword(false);
-        return warningNotify("no password entered");
-      }
-
-      const updatedFiled = { ...changePassword };
+      const updatedFiled = { ...values };
       const data: CustomAxiosResponse = await UserService.updateUser(updatedFiled);
       if (data?.response?.data) throw data;
       setUser(data.data.updateUser);
-      setChangePassword(null);
       setPersonPassword(false);
+      values = {
+        oldPassword: "",
+        newPassword: "",
+      };
       successNotify("user password updated");
     } catch (err: any) {
       return errorNotify(err.response.data);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+    },
+    validationSchema: changePasswordSchema,
+    onSubmit: saveNewUserPassword,
+  });
+
   return (
     <>
       {user ? (
@@ -114,10 +121,10 @@ export const SettingsContainer = () => {
           setPersonEmail={setPersonEmail}
           setPersonPassword={setPersonPassword}
           saveNewUserInfo={saveNewUserInfo}
-          saveNewUserPassword={saveNewUserPassword}
-          setChangePassword={setChangePassword}
           setImage={setImage}
           user={user}
+          loading={loading}
+          formik={formik}
         />
       ) : (
         <Skeleton variant="rectangular" width={"100%"} height={500} sx={{ borderRadius: 2 }} />

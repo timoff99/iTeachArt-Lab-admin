@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Paper, Skeleton, TextField, Typography } from "@mui/material";
 
 import { IAuthUser } from "shared/ui-kit/UserProvider";
 import { FormPasswordData } from "shared/interfaces/Settings";
+import { FormikHandlers, FormikState } from "formik";
 
 interface ISettingsViewProps {
   personName: boolean;
@@ -16,14 +17,10 @@ interface ISettingsViewProps {
       target: HTMLInputElement;
     }
   ) => Promise<React.ReactText | undefined>;
-  saveNewUserPassword: (
-    e: React.KeyboardEvent<HTMLDivElement> & {
-      target: HTMLInputElement;
-    }
-  ) => Promise<React.ReactText | undefined>;
-  setChangePassword: React.Dispatch<React.SetStateAction<FormPasswordData | null>>;
   setImage: (e: React.ChangeEvent) => Promise<void>;
   user: IAuthUser;
+  loading: boolean;
+  formik: FormikState<any> & FormikHandlers;
 }
 
 export const SettingsView = ({
@@ -34,10 +31,10 @@ export const SettingsView = ({
   setPersonEmail,
   setPersonPassword,
   saveNewUserInfo,
-  saveNewUserPassword,
-  setChangePassword,
   setImage,
   user,
+  loading,
+  formik,
 }: ISettingsViewProps) => (
   <>
     <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "22px" }} gutterBottom>
@@ -47,20 +44,27 @@ export const SettingsView = ({
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <label htmlFor="contained-button-file">
           <Box sx={{ display: "none" }} id="contained-button-file" component="input" type="file" onChange={setImage} />
-          <Box
-            component="img"
-            sx={{
-              borderRadius: "50%",
-              maxWidth: { xs: "72px", md: "126px" },
-              maxHeight: "126px",
-              width: "100%",
-              objectFit: "cover",
-              cursor: "pointer",
-              mr: 4,
-            }}
-            alt="userImage"
-            src={user.image}
-          />
+          {!loading ? (
+            <Avatar
+              variant="circular"
+              sx={{
+                width: 126,
+                height: 126,
+                mr: 4,
+              }}
+              alt="userImage"
+              src={user.image}
+            />
+          ) : (
+            <Skeleton
+              variant="circular"
+              sx={{
+                width: 126,
+                height: 126,
+                mr: 4,
+              }}
+            />
+          )}
         </label>
         <Box>
           <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: "36px" }}>{user.username}</Typography>
@@ -71,7 +75,7 @@ export const SettingsView = ({
         Personal information
       </Typography>
       <Box>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", mb: 4 }}>
           <Typography sx={{ fontSize: "18px", mr: 2 }}>Name</Typography>
           {user.username && !personName ? (
             <Typography sx={{ fontSize: "18px", ml: 5 }}>{user.username}</Typography>
@@ -104,7 +108,7 @@ export const SettingsView = ({
           </Button>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", mb: 4 }}>
           <Typography sx={{ fontSize: "18px", mr: 2 }}>Email</Typography>
           {user.email && !personEmail ? (
             <Typography sx={{ fontSize: "18px", ml: 5 }}>{user.email}</Typography>
@@ -150,17 +154,17 @@ export const SettingsView = ({
           ) : (
             <Box
               component="form"
-              onSubmit={saveNewUserPassword}
+              onSubmit={formik.handleSubmit}
               sx={{
                 display: "flex",
-                alignItems: { xs: "flex-start", md: "center" },
-                flexDirection: { xs: "column", md: "row" },
+                alignItems: { xs: "flex-start" },
+                flexDirection: { xs: "column" },
               }}
             >
               <TextField
                 sx={{
-                  ml: { xs: 0, md: 5 },
-                  mb: { xs: 2, md: 0 },
+                  ml: { xs: 0 },
+                  mb: { xs: 2 },
                   "& .MuiInputBase-root": {
                     height: 45,
                     borderRadius: 2,
@@ -174,13 +178,14 @@ export const SettingsView = ({
                 }}
                 placeholder="Old Password"
                 name="oldPassword"
-                onKeyPress={saveNewUserInfo}
-                onChange={(e) => setChangePassword((prev) => ({ ...prev, oldPassword: e.target.value }))}
+                onChange={formik.handleChange}
+                error={formik.touched.oldPassword && Boolean(formik.errors.oldPassword)}
+                helperText={formik.touched.oldPassword && formik.errors.oldPassword}
               />
 
               <TextField
                 sx={{
-                  ml: { xs: 0, md: 5 },
+                  ml: { xs: 0 },
                   "& .MuiInputBase-root": {
                     height: 45,
                     borderRadius: 2,
@@ -194,8 +199,9 @@ export const SettingsView = ({
                 }}
                 placeholder="New Password"
                 name="newPassword"
-                onKeyPress={saveNewUserInfo}
-                onChange={(e) => setChangePassword((prev) => ({ ...prev, newPassword: e.target.value }))}
+                onChange={formik.handleChange}
+                error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
+                helperText={formik.touched.newPassword && formik.errors.newPassword}
               />
 
               <Button type="submit" sx={{ alignSelf: "center" }}>
