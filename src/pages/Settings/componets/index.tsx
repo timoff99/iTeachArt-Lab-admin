@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Paper, Skeleton, TextField, Typography } from "@mui/material";
 
 import { IAuthUser } from "shared/ui-kit/UserProvider";
-import { FormPasswordData } from "shared/interfaces/Settings";
+import { FormikHandlers, FormikState } from "formik";
 
 interface ISettingsViewProps {
   personName: boolean;
@@ -13,17 +13,13 @@ interface ISettingsViewProps {
   setPersonPassword: (value: React.SetStateAction<boolean>) => void;
   saveNewUserInfo: (
     e: React.KeyboardEvent<HTMLDivElement> & {
-      target: HTMLInputElement;
+      target: HTMLInputElement[];
     }
   ) => Promise<React.ReactText | undefined>;
-  saveNewUserPassword: (
-    e: React.KeyboardEvent<HTMLDivElement> & {
-      target: HTMLInputElement;
-    }
-  ) => Promise<React.ReactText | undefined>;
-  setChangePassword: React.Dispatch<React.SetStateAction<FormPasswordData | null>>;
   setImage: (e: React.ChangeEvent) => Promise<void>;
   user: IAuthUser;
+  loading: boolean;
+  formik: FormikState<any> & FormikHandlers;
 }
 
 export const SettingsView = ({
@@ -34,10 +30,10 @@ export const SettingsView = ({
   setPersonEmail,
   setPersonPassword,
   saveNewUserInfo,
-  saveNewUserPassword,
-  setChangePassword,
   setImage,
   user,
+  loading,
+  formik,
 }: ISettingsViewProps) => (
   <>
     <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "22px" }} gutterBottom>
@@ -47,20 +43,27 @@ export const SettingsView = ({
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <label htmlFor="contained-button-file">
           <Box sx={{ display: "none" }} id="contained-button-file" component="input" type="file" onChange={setImage} />
-          <Box
-            component="img"
-            sx={{
-              borderRadius: "50%",
-              maxWidth: { xs: "72px", md: "126px" },
-              maxHeight: "126px",
-              width: "100%",
-              objectFit: "cover",
-              cursor: "pointer",
-              mr: 4,
-            }}
-            alt="userImage"
-            src={user.image}
-          />
+          {!loading ? (
+            <Avatar
+              variant="circular"
+              sx={{
+                width: 126,
+                height: 126,
+                mr: 4,
+              }}
+              alt="userImage"
+              src={user.image}
+            />
+          ) : (
+            <Skeleton
+              variant="circular"
+              sx={{
+                width: 126,
+                height: 126,
+                mr: 4,
+              }}
+            />
+          )}
         </label>
         <Box>
           <Typography sx={{ fontWeight: "fontWeightMedium", fontSize: "36px" }}>{user.username}</Typography>
@@ -70,76 +73,152 @@ export const SettingsView = ({
       <Typography sx={{ fontWeight: "fontWeightBold", fontSize: "24px", mb: 4, mt: 4 }}>
         Personal information
       </Typography>
-      <Box>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-          <Typography sx={{ fontSize: "18px", mr: 2 }}>Name</Typography>
-          {user.username && !personName ? (
-            <Typography sx={{ fontSize: "18px", ml: 5 }}>{user.username}</Typography>
-          ) : (
-            <TextField
-              sx={{
-                ml: 5,
-                "& .MuiInputBase-root": {
-                  height: 45,
-                  borderRadius: 2,
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderWidth: 1,
-                    borderColor: "text.disabled",
-                  },
-                },
-              }}
-              name="username"
-              defaultValue={user.username}
-              onKeyPress={saveNewUserInfo}
-            />
-          )}
-          <Button
-            variant="text"
-            sx={{ ml: 1, alignItems: "center", textTransform: "lowercase", fontSize: "16px" }}
-            onClick={() => setPersonName((prev) => !prev)}
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        {user.username && !personName ? (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: { xs: "flex-start", md: "center" },
+              flexDirection: { xs: "column", md: "row" },
+              mb: 4,
+            }}
           >
-            change
-          </Button>
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-          <Typography sx={{ fontSize: "18px", mr: 2 }}>Email</Typography>
-          {user.email && !personEmail ? (
-            <Typography sx={{ fontSize: "18px", ml: 5 }}>{user.email}</Typography>
-          ) : (
-            <TextField
+            <Typography sx={{ fontSize: "18px", mr: { xs: 0, md: 2 } }}>Name</Typography>
+            <Typography sx={{ fontSize: "18px", fontWeight: "fontWeightBold", ml: { xs: 0, md: 10 } }}>
+              {user.username}
+            </Typography>
+            <Button
+              variant="text"
               sx={{
-                ml: 5,
-                "& .MuiInputBase-root": {
-                  height: 45,
-                  borderRadius: 2,
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderWidth: 1,
-                    borderColor: "text.disabled",
-                  },
-                },
+                ml: { xs: 0, md: 1 },
+                alignItems: { xs: "flex-start", md: "center" },
+                textTransform: "lowercase",
+                fontSize: "16px",
+                minWidth: { xs: 0, md: "auto" },
+                p: { xs: 0, md: "6px 8px" },
               }}
-              name="email"
-              defaultValue={user.email}
-              onKeyPress={saveNewUserInfo}
-            />
-          )}
-          <Button
-            variant="text"
-            sx={{ ml: 1, alignItems: "center", textTransform: "lowercase", fontSize: "16px" }}
-            onClick={() => setPersonEmail((prev) => !prev)}
-          >
-            change
-          </Button>
-        </Box>
+              onClick={() => setPersonName((prev) => !prev)}
+            >
+              change
+            </Button>
+          </Box>
+        ) : (
+          <Box display="flex" alignItems="flex-start" flexWrap="wrap" mb={8} flexDirection="column">
+            <Typography sx={{ fontSize: "18px", mr: { xs: 0, md: 2 } }}>Name</Typography>
+            <Box
+              component="form"
+              onSubmit={saveNewUserInfo}
+              sx={{ display: "flex", mr: { xs: 0, md: 5 }, flexDirection: { xs: "column", md: "row" } }}
+            >
+              <TextField
+                sx={{
+                  ml: 0,
+                  "& .MuiInputBase-root": {
+                    height: 45,
+                    borderRadius: 2,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderWidth: 1,
+                      borderColor: "text.disabled",
+                    },
+                  },
+                }}
+                name="username"
+                defaultValue={user.username}
+              />
+              <Box alignSelf="center" mt={{ xs: 1, md: 0 }}>
+                <Button
+                  variant="contained"
+                  sx={{ ml: { xs: 0, md: 2 } }}
+                  type="reset"
+                  onClick={() => setPersonName((prev) => !prev)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="contained" sx={{ ml: 2 }} type="submit">
+                  Submit
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-          <Typography sx={{ fontSize: "18px", mr: 2 }}>Password</Typography>
-          {!personPassword ? (
+        {user.email && !personEmail ? (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: { xs: "flex-start", md: "center" },
+              flexDirection: { xs: "column", md: "row" },
+              mb: 4,
+            }}
+          >
+            <Typography sx={{ fontSize: "18px", mr: { xs: 0, md: 2 } }}>Email</Typography>
+            <Typography sx={{ fontSize: "18px", fontWeight: "fontWeightBold", ml: { xs: 0, md: 10 } }}>
+              {user.email}
+            </Typography>
+            <Button
+              variant="text"
+              sx={{
+                ml: { xs: 0, md: 1 },
+                alignItems: { xs: "flex-start", md: "center" },
+                textTransform: "lowercase",
+                fontSize: "16px",
+                minWidth: { xs: 0, md: "auto" },
+                p: { xs: 0, md: "6px 8px" },
+              }}
+              onClick={() => setPersonEmail((prev) => !prev)}
+            >
+              change
+            </Button>
+          </Box>
+        ) : (
+          <Box display="flex" alignItems="flex-start" flexWrap="wrap" mb={8} flexDirection="column">
+            <Typography sx={{ fontSize: "18px", mr: { xs: 0, md: 2 } }}>Email</Typography>
+            <Box
+              component="form"
+              onSubmit={saveNewUserInfo}
+              sx={{ display: "flex", mr: { xs: 0, md: 5 }, flexDirection: { xs: "column", md: "row" } }}
+            >
+              <TextField
+                sx={{
+                  ml: 0,
+                  "& .MuiInputBase-root": {
+                    height: 45,
+                    borderRadius: 2,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderWidth: 1,
+                      borderColor: "text.disabled",
+                    },
+                  },
+                }}
+                name="email"
+                type="email"
+                defaultValue={user.email}
+              />
+              <Box alignSelf="center" mt={{ xs: 1, md: 0 }}>
+                <Button
+                  variant="contained"
+                  sx={{ ml: { xs: 0, md: 2 } }}
+                  type="reset"
+                  onClick={() => setPersonEmail((prev) => !prev)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="contained" sx={{ ml: 2 }} type="submit">
+                  Submit
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {!personPassword ? (
+          <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
+            <Typography sx={{ fontSize: "18px", mr: 2 }}>Password</Typography>
+
             <Button
               variant="outlined"
               sx={{ fontSize: "18px", ml: { xs: 0, md: 5 } }}
@@ -147,20 +226,23 @@ export const SettingsView = ({
             >
               Change password
             </Button>
-          ) : (
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "flex-start", flexWrap: "wrap", mb: 8, flexDirection: "column" }}>
+            <Typography sx={{ fontSize: "18px", mr: { xs: 0, md: 2 } }}>Password</Typography>
             <Box
               component="form"
-              onSubmit={saveNewUserPassword}
+              onSubmit={formik.handleSubmit}
               sx={{
                 display: "flex",
-                alignItems: { xs: "flex-start", md: "center" },
+                mr: { xs: 0, md: 5 },
                 flexDirection: { xs: "column", md: "row" },
               }}
             >
               <TextField
                 sx={{
-                  ml: { xs: 0, md: 5 },
-                  mb: { xs: 2, md: 0 },
+                  mb: { xs: 1, md: 0 },
+                  ml: 0,
                   "& .MuiInputBase-root": {
                     height: 45,
                     borderRadius: 2,
@@ -174,13 +256,11 @@ export const SettingsView = ({
                 }}
                 placeholder="Old Password"
                 name="oldPassword"
-                onKeyPress={saveNewUserInfo}
-                onChange={(e) => setChangePassword((prev) => ({ ...prev, oldPassword: e.target.value }))}
+                onChange={formik.handleChange}
               />
-
               <TextField
                 sx={{
-                  ml: { xs: 0, md: 5 },
+                  ml: 0,
                   "& .MuiInputBase-root": {
                     height: 45,
                     borderRadius: 2,
@@ -194,16 +274,31 @@ export const SettingsView = ({
                 }}
                 placeholder="New Password"
                 name="newPassword"
-                onKeyPress={saveNewUserInfo}
-                onChange={(e) => setChangePassword((prev) => ({ ...prev, newPassword: e.target.value }))}
+                onChange={formik.handleChange}
               />
-
-              <Button type="submit" sx={{ alignSelf: "center" }}>
-                submit
-              </Button>
+              <Box display="flex" alignSelf="center" mt={{ xs: 1, md: 0 }}>
+                <Button
+                  variant="contained"
+                  sx={{ ml: { xs: 0, md: 2 } }}
+                  type="reset"
+                  onClick={() => setPersonPassword((prev) => !prev)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="contained" sx={{ ml: 2 }} type="submit">
+                  Submit
+                </Button>
+              </Box>
             </Box>
-          )}
-        </Box>
+            {!formik.values.oldPassword && <Box color="red">{formik.errors.oldPassword}</Box>}
+            {formik.values.oldPassword && !formik.values.newPassword && (
+              <Box color="red">{formik.errors.newPassword}</Box>
+            )}
+            {formik.values.oldPassword && formik.values.newPassword && (
+              <Box sx={{ color: "red", width: { xs: "auto", md: 600, lg: "auto" } }}>{formik.errors.newPassword}</Box>
+            )}
+          </Box>
+        )}
       </Box>
     </Paper>
   </>

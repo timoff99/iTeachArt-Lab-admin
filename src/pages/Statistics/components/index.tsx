@@ -9,15 +9,15 @@ interface Props {
 
 export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStatistics, cardsStatistics }: Props) => {
   return (
-    <Box>
+    <Box maxWidth="1100px">
       <Typography fontWeight="fontWeightBold" fontSize={22} gutterBottom>
         Statistics
       </Typography>
-      <Grid container spacing={3} columns={10}>
+      <Grid container spacing={3} columns={12}>
         {statistics.length > 0 ? (
           statistics.map(({ title, value }, index) => (
-            <Grid item key={index}>
-              <Card sx={{ borderRadius: 5, p: 1, width: 196 }}>
+            <Grid item xs={6} md={3} key={index}>
+              <Card sx={{ borderRadius: 5, p: 1 }}>
                 <Box sx={{ p: 2 }}>
                   <Typography sx={{ fontSize: 18 }} fontWeight="fontWeightBold" gutterBottom>
                     {title}
@@ -38,8 +38,8 @@ export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStati
         )}
       </Grid>
 
-      <Grid container spacing={3} columns={10}>
-        <Grid item sx={{ mt: 3 }}>
+      <Grid container spacing={3} columns={12}>
+        <Grid item sx={{ mt: 3 }} xs={12} md={4}>
           {userStatistics.length > 0 ? (
             <Card sx={{ borderRadius: 5, p: 1, minWidth: 196 }}>
               <Box sx={{ p: 2 }}>
@@ -59,7 +59,7 @@ export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStati
           )}
         </Grid>
 
-        <Grid item sx={{ mt: 3 }} xs={12} sm={12} md={4}>
+        <Grid item sx={{ mt: 3 }} xs={12} md={8}>
           {mostActiveUserStatistics.length > 0 ? (
             <Card sx={{ borderRadius: 5, p: 1 }}>
               <Box sx={{ p: 2 }}>
@@ -68,11 +68,11 @@ export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStati
                 </Typography>
                 {mostActiveUserStatistics.map(({ image, username, value, type }, index) => (
                   <Box sx={{ display: "flex", alignItems: "center", mt: 2 }} key={index}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
                       <Avatar sx={{ width: 32, height: 32 }} alt="Remy Sharp" src={image} />
                       <Typography sx={{ ml: 2 }}>{username}</Typography>
                     </Box>
-                    <Typography sx={{ ml: 6 }}>
+                    <Typography sx={{ ml: 6, flex: 3 }}>
                       {value} {type}
                     </Typography>
                   </Box>
@@ -85,16 +85,16 @@ export const StatisticsView = ({ statistics, userStatistics, mostActiveUserStati
         </Grid>
       </Grid>
 
-      <Grid container spacing={3} columns={10}>
+      <Grid container spacing={3} columns={12}>
         {cardsStatistics.length > 0 ? (
           cardsStatistics.map(({ title, views, image, cardName, author }, index) => (
-            <Grid item sx={{ mt: 3 }} key={index} xs={12} sm={12} md={3}>
+            <Grid item sx={{ mt: 3 }} key={index} xs={12} md={6}>
               <Card sx={{ borderRadius: 5, p: 1 }}>
                 <Box sx={{ p: 2 }}>
                   <Typography gutterBottom sx={{ fontSize: 20, fontWeight: "fontWeightBold" }}>
                     {title}
                   </Typography>
-                  <Typography>{views}</Typography>
+                  <Typography>{views} views</Typography>
                   <CardMedia
                     component="img"
                     height="140"

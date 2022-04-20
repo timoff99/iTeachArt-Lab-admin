@@ -101,51 +101,39 @@ export const RecipeView = ({
             <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Directions
             </Typography>
-            {steps?.length ? (
-              steps?.map((el, index) => (
-                <Box key={index}>
-                  <Typography
-                    sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 14, md: 16 }, display: "inline-block" }}
-                  >
-                    Step {index + 1}:
-                  </Typography>{" "}
-                  <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block" }}>{el}</Typography>
-                </Box>
-              ))
-            ) : (
-              <>
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-              </>
-            )}
+            {steps?.length
+              ? steps?.map((el, index) => (
+                  <Box key={index}>
+                    <Typography
+                      sx={{ fontWeight: "fontWeightBold", fontSize: { xs: 14, md: 16 }, display: "inline-block" }}
+                    >
+                      Step {index + 1}:
+                    </Typography>{" "}
+                    <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block" }}>{el}</Typography>
+                  </Box>
+                ))
+              : null}
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", flex: 1, maxWidth: 300 }}>
             <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "fontWeightMedium" }} gutterBottom>
               Ingredients
             </Typography>
-            {ingredients?.length ? (
-              ingredients?.map((el, index) => (
-                <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
-                  <Box
-                    sx={{
-                      height: "5px",
-                      width: "5px",
-                      backgroundColor: "primary.main",
-                      borderRadius: "50%",
-                      display: "inline-block",
-                    }}
-                  />
-                  <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block", ml: 1 }}>{el}</Typography>
-                </Box>
-              ))
-            ) : (
-              <>
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-                <Skeleton variant="text" width="100%" sx={{ m: 1 }} />
-              </>
-            )}
+            {ingredients?.length
+              ? ingredients?.map((el, index) => (
+                  <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        height: "5px",
+                        width: "5px",
+                        backgroundColor: "primary.main",
+                        borderRadius: "50%",
+                        display: "inline-block",
+                      }}
+                    />
+                    <Typography sx={{ fontSize: { xs: 14, md: 16 }, display: "inline-block", ml: 1 }}>{el}</Typography>
+                  </Box>
+                ))
+              : null}
           </Box>
         </Box>
         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>

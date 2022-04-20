@@ -24,6 +24,7 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
   const [orderBy, setOrderBy] = useState<keyof tableData>("title");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
   const [userId, setUserId] = useState<string>("");
@@ -32,6 +33,15 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
   const { search } = useContext(UserContext);
 
   const openOption = Boolean(anchorElOption);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, _id: string) => {
     event.stopPropagation();
     setAnchorElOption(event.currentTarget);
@@ -110,6 +120,9 @@ export const TableContainer = ({ flag, deleteMutation }: Props) => {
           emptyRows={emptyRows}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
+          openDialog={openDialog}
+          handleClickOpenDialog={handleClickOpenDialog}
+          handleCloseDialog={handleCloseDialog}
         />
       ) : (
         <Skeleton variant="rectangular" width={"100%"} height={500} sx={{ borderRadius: 3 }} />

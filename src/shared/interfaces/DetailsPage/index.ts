@@ -30,8 +30,11 @@ export interface ICommentProps {
   userId: string;
   commentId: string;
   handleCloseMenu: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleDeleteComment: (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => void;
+  handleDeleteComment: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, _id: string) => void;
   handleBlockUser: (_id: string, user_status: string) => void;
+  openDialog: boolean;
+  handleCloseDialog: () => void;
+  handleClickOpenDialog: () => void;
 }
 
 export interface cookbookData {

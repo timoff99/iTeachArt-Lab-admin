@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { ROUTE_NAMES } from "../router/routeNames";
 import { ApiUrl } from "../shared/types/routes";
 
-export const API_URL = `${process.env.REACT_APP_API_URI}/api` || ApiUrl.dev;
+export const API_URL = (process.env.REACT_APP_API_URI || ApiUrl.dev) + "/api";
 
 const api = axios.create({
   withCredentials: true,
@@ -22,7 +22,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || 403) {
       return (window.location.href = ROUTE_NAMES.LOGIN);
     }
     if (error.response.data.message === "User not authorized") {
