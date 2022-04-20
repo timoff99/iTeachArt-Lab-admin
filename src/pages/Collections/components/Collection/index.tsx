@@ -2,7 +2,20 @@ import React from "react";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { UseMutationResult } from "react-query";
-import { Box, Button, Card, Grid, IconButton, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -23,17 +36,50 @@ interface CollectionViewProps {
     },
     unknown
   >;
+  deleteRecipeCollectionMutation: UseMutationResult<
+    AxiosResponse<any, any>,
+    unknown,
+    {
+      collection_id: string;
+      cloudinary_id: string;
+    },
+    unknown
+  >;
   setId: React.Dispatch<React.SetStateAction<string>>;
   collectionType: string;
   setCurrentId: React.Dispatch<React.SetStateAction<string>>;
+  openDialog: boolean;
+  handleCloseDialog: () => void;
+  handleClickOpenDialog: () => void;
+  dialogValue: {
+    collection_id: string;
+    cloudinary_id: string;
+  };
+
+  setDialogValue: React.Dispatch<
+    React.SetStateAction<{
+      collection_id: string;
+      cloudinary_id: string;
+    }>
+  >;
+  currentCollectionType: string;
+  setCurrentCollectionType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const CollectionsView = ({
   cookbookCollection,
   deleteCookbookCollectionMutation,
+  deleteRecipeCollectionMutation,
   setId,
   collectionType,
   setCurrentId,
+  openDialog,
+  handleCloseDialog,
+  handleClickOpenDialog,
+  dialogValue,
+  setDialogValue,
+  currentCollectionType,
+  setCurrentCollectionType,
 }: CollectionViewProps) => {
   const navigation = useNavigate();
   return (
@@ -114,7 +160,11 @@ export const CollectionsView = ({
                       background: "white",
                       minWidth: 40,
                     }}
-                    onClick={() => deleteCookbookCollectionMutation.mutate({ collection_id: _id, cloudinary_id })}
+                    onClick={() => {
+                      handleClickOpenDialog();
+                      setDialogValue({ collection_id: _id, cloudinary_id });
+                      setCurrentCollectionType(collectionType);
+                    }}
                   >
                     <DeleteIcon sx={{ color: "black" }} />
                   </Button>
@@ -122,6 +172,29 @@ export const CollectionsView = ({
               </Card>
             </Grid>
           ))}
+        <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+          <DialogTitle sx={{ textAlign: "center", fontSize: "30px" }}>{"Delete collection"}</DialogTitle>
+          <DialogContent sx={{ alignSelf: "center" }}>
+            <DialogContentText sx={{ textAlign: "center", fontSize: "20px" }}>Are you sure?</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog}>No</Button>
+            <Button
+              onClick={() => {
+                console.log(currentCollectionType);
+                if (currentCollectionType === "cookbook") {
+                  deleteCookbookCollectionMutation.mutate(dialogValue);
+                } else {
+                  deleteRecipeCollectionMutation.mutate(dialogValue);
+                }
+                handleCloseDialog();
+              }}
+              autoFocus
+            >
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Grid>
     </Paper>
   );

@@ -15,7 +15,21 @@ export const CollectionsContainer = () => {
   const [CookbookCollectionId, setCookbookCollectionId] = useState<string>("");
   const [RecipeCollectionId, setRecipeCollectionId] = useState<string>("");
   const [currentId, setCurrentId] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentCollectionType, setCurrentCollectionType] = useState<string>("");
+  const [dialogValue, setDialogValue] = useState<{ collection_id: string; cloudinary_id: string }>({
+    collection_id: "string",
+    cloudinary_id: "",
+  });
   const queryClient = useQueryClient();
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const { data: cookbookCollection, isLoading: loadingCookbookCollection } = useQuery(
     queryKey.getAllCookbookCollection,
@@ -146,9 +160,17 @@ export const CollectionsContainer = () => {
         <CollectionsView
           cookbookCollection={cookbookCollection}
           deleteCookbookCollectionMutation={deleteCookbookCollectionMutation}
+          deleteRecipeCollectionMutation={deleteRecipeCollectionMutation}
           setId={setCookbookCollectionId}
           collectionType={"cookbook"}
           setCurrentId={setCurrentId}
+          openDialog={openDialog}
+          handleCloseDialog={handleCloseDialog}
+          handleClickOpenDialog={handleClickOpenDialog}
+          dialogValue={dialogValue}
+          setDialogValue={setDialogValue}
+          currentCollectionType={currentCollectionType}
+          setCurrentCollectionType={setCurrentCollectionType}
         />
       ) : (
         <Skeleton variant="rectangular" height="50%" />
@@ -159,14 +181,23 @@ export const CollectionsContainer = () => {
       {!loadingRecipeCollection ? (
         <CollectionsView
           cookbookCollection={recipeCollection}
-          deleteCookbookCollectionMutation={deleteRecipeCollectionMutation}
+          deleteCookbookCollectionMutation={deleteCookbookCollectionMutation}
+          deleteRecipeCollectionMutation={deleteRecipeCollectionMutation}
           setId={setRecipeCollectionId}
           collectionType={"recipe"}
           setCurrentId={setCurrentId}
+          openDialog={openDialog}
+          handleCloseDialog={handleCloseDialog}
+          handleClickOpenDialog={handleClickOpenDialog}
+          dialogValue={dialogValue}
+          setDialogValue={setDialogValue}
+          currentCollectionType={currentCollectionType}
+          setCurrentCollectionType={setCurrentCollectionType}
         />
       ) : (
         <Skeleton variant="rectangular" height="50%" />
       )}
+
       {cards && (
         <Paper sx={{ p: { xs: 3, md: 1 }, mt: 3 }}>
           <Typography

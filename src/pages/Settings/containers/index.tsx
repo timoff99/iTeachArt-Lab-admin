@@ -39,9 +39,15 @@ export const SettingsContainer = () => {
     }
   };
 
-  const updateUserMutation = useMutation(
-    (updatedFiled: { image: string; cloudinary_id: string } | IUpdatedUserFiled) =>
-      UserService.updateUser(updatedFiled),
+  const updateUserMutation = useMutation((updatedFiled: IUpdatedUserFiled) => UserService.updateUser(updatedFiled), {
+    onSuccess: ({ data }: { data: { updateUser: IAuthUser } }) => {
+      setUser(data.updateUser);
+    },
+    onSettled: () => setLoading(false),
+  });
+
+  const updateUserImageMutation = useMutation(
+    (updatedFiled: { image: string; cloudinary_id: string }) => UserService.updateUser(updatedFiled),
     {
       onSuccess: ({ data }: { data: { updateUser: IAuthUser } }) => {
         setUser(data.updateUser);
@@ -54,7 +60,7 @@ export const SettingsContainer = () => {
   const ImageMutation = useMutation((formData: FormData) => ImageService.addImage(formData), {
     onSuccess: ({ data }: { data: { secure_url: string; public_id: string } }) => {
       const updatedFiled = { image: data.secure_url, cloudinary_id: data.public_id };
-      updateUserMutation.mutate(updatedFiled);
+      updateUserImageMutation.mutate(updatedFiled);
     },
   });
 
@@ -66,19 +72,17 @@ export const SettingsContainer = () => {
     ImageMutation.mutate(formData);
   };
 
-  const saveNewUserInfo = async (e: React.KeyboardEvent<HTMLDivElement> & { target: HTMLInputElement }) => {
+  const saveNewUserInfo = async (e: React.KeyboardEvent<HTMLDivElement> & { target: HTMLInputElement[] }) => {
     try {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const updatedValue = e.target.value;
-        const inputName = e.target.name;
-        const updatedFiled: IUpdatedUserFiled = { [inputName]: updatedValue };
-        updateUserMutation.mutate(updatedFiled);
-        e.target.value = "";
-        setPersonName(false);
-        setPersonEmail(false);
-        successNotify(`user ${inputName} updated`);
-      }
+      e.preventDefault();
+      const updatedValue = e.target[0].value;
+      const inputName = e.target[0].name;
+      const updatedFiled: IUpdatedUserFiled = { [inputName]: updatedValue };
+      updateUserMutation.mutate(updatedFiled);
+      e.target[0].value = "";
+      setPersonName(false);
+      setPersonEmail(false);
+      successNotify(`user ${inputName} updated`);
     } catch (e: any) {
       return errorNotify(e.response.data);
     }

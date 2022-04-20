@@ -67,7 +67,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell key={headCell.id} sx={{ fontSize: 16, fontWeight: "fontWeightBold", pt: 5, pb: 0, pl: 5 }}>
+          <TableCell key={headCell.id} sx={{ fontSize: 16, fontWeight: "fontWeightBold", pt: 5, pb: 2, pl: 5 }}>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
@@ -121,7 +121,11 @@ export const UserTableView = ({
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>
         <TableContainer sx={{ borderRadius: "20px" }}>
-          <Table stickyHeader sx={{ "& .MuiTableCell-root": { borderBottom: 0, pt: 5, pb: 0, pl: 5 } }} size={"medium"}>
+          <Table
+            stickyHeader
+            sx={{ "& .MuiTableCell-root": { borderBottom: 0 }, "& .MuiTableCell-body": { pt: 2, pb: 2, pl: 5 } }}
+            size={"medium"}
+          >
             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
             <TableBody>
               {allUsers.length > 0 &&
@@ -185,20 +189,20 @@ export const UserTableView = ({
                       </TableCell>
                       <TableCell>
                         <IconButton onClick={(event) => handleOpenMenu(event, row._id)}>{<MoreHorizIcon />}</IconButton>
-                        <Menu
-                          anchorEl={anchorElOption}
-                          open={openOption}
-                          sx={{ bottom: 0, left: "-30px" }}
-                          onClose={handleCloseMenu}
-                        >
-                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "active")}>Active</MenuItem>
-                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "blocked")}>Block</MenuItem>
-                          <MenuItem onClick={() => handleUpdateUserStatus(userId, "deleted")}>Delete</MenuItem>
-                        </Menu>
                       </TableCell>
                     </TableRow>
                   );
                 })}
+              <Menu
+                anchorEl={anchorElOption}
+                open={openOption}
+                sx={{ bottom: 0, left: "-30px" }}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem onClick={() => handleUpdateUserStatus(userId, "active")}>Active</MenuItem>
+                <MenuItem onClick={() => handleUpdateUserStatus(userId, "blocked")}>Block</MenuItem>
+                <MenuItem onClick={() => handleUpdateUserStatus(userId, "deleted")}>Delete</MenuItem>
+              </Menu>
 
               <TableRow
                 style={{

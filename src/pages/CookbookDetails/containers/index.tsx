@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Paper, Typography } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { toast } from "react-toastify";
 
 import UserService from "services/user.service";
 import CookBookService from "services/cookbook.service";
@@ -18,10 +19,23 @@ export const CookbookDetailsContainer = () => {
   const [anchorElOption, setAnchorElOption] = useState<null | HTMLElement>(null);
   const [userId, setUserId] = useState<string>("");
   const [commentId, setCommentId] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState(false);
   const openOption = Boolean(anchorElOption);
   const navigation = useNavigate();
   const queryClient = useQueryClient();
   const params = useParams();
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const successNotify = (msg: string) => {
+    return toast.success(msg);
+  };
 
   const id = params.id || "";
   const { isError, data: cookbookDetails }: { isError?: boolean; data?: cookbookData } = useQuery(
@@ -56,7 +70,7 @@ export const CookbookDetailsContainer = () => {
   const deleteCommentMutation = useMutation((_id: string) => CookbookCommentService.deleteCookbookComment(_id), {
     onSettled: () => queryClient.invalidateQueries(queryKey.cookbookDetails),
   });
-  const handleDeleteComment = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string) => {
+  const handleDeleteComment = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, _id: string) => {
     event.stopPropagation();
 
     deleteCookBookCommentsIdMutation.mutate({ card_id: cookbookDetails?._id as string, comment_id: _id });
@@ -67,7 +81,11 @@ export const CookbookDetailsContainer = () => {
   const UpdateStatusMutation = useMutation(
     ({ _id, user_status }: { _id: string; user_status: string }) => UserService.updateUserStatus(_id, user_status),
     {
-      onSettled: () => queryClient.invalidateQueries(queryKey.allUsers),
+      onSettled: () => {
+        queryClient.invalidateQueries(queryKey.allUsers);
+        successNotify("user successfully blocked");
+        handleCloseMenu();
+      },
     }
   );
 
@@ -106,6 +124,9 @@ export const CookbookDetailsContainer = () => {
             handleCloseMenu={handleCloseMenu}
             handleDeleteComment={handleDeleteComment}
             handleBlockUser={handleBlockUser}
+            openDialog={openDialog}
+            handleCloseDialog={handleCloseDialog}
+            handleClickOpenDialog={handleClickOpenDialog}
           />
         )}
       </Paper>

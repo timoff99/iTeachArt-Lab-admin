@@ -13,9 +13,14 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  AvatarGroup,
   Avatar,
   Skeleton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -67,7 +72,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell key={headCell.id} sx={{ fontSize: 16, fontWeight: "fontWeightBold", pt: 5, pb: 0, pl: 5 }}>
+          <TableCell key={headCell.id} sx={{ fontSize: 16, fontWeight: "fontWeightBold", pt: 5, pb: 2, pl: 5 }}>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
@@ -99,6 +104,9 @@ interface ITableProps {
   emptyRows: number;
   handleChangePage: (event: unknown, newPage: number) => void;
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  openDialog: boolean;
+  handleClickOpenDialog: () => void;
+  handleCloseDialog: () => void;
 }
 
 export const TableView = ({
@@ -118,11 +126,18 @@ export const TableView = ({
   emptyRows,
   handleChangePage,
   handleChangeRowsPerPage,
+  openDialog,
+  handleClickOpenDialog,
+  handleCloseDialog,
 }: ITableProps) => (
   <Box sx={{ width: "100%" }}>
     <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>
       <TableContainer sx={{ borderRadius: "20px" }}>
-        <Table stickyHeader sx={{ "& .MuiTableCell-root": { borderBottom: 0, pt: 5, pb: 0, pl: 5 } }} size={"medium"}>
+        <Table
+          stickyHeader
+          sx={{ "& .MuiTableCell-root": { borderBottom: 0 }, "& .MuiTableCell-body": { pt: 2, pb: 2, pl: 5 } }}
+          size={"medium"}
+        >
           <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
             {dataRows.length > 0 &&
@@ -158,22 +173,41 @@ export const TableView = ({
                     <TableCell>{row.comments.length}</TableCell>
                     <TableCell>
                       <IconButton onClick={(event) => handleOpenMenu(event, row._id)}>{<MoreHorizIcon />}</IconButton>
-                      <Menu
-                        anchorEl={anchorElOption}
-                        open={openOption}
-                        sx={{ bottom: 0, left: "-30px" }}
-                        onClose={handleCloseMenu}
-                      >
-                        <MenuItem onClick={(event) => handleOpenDetailsPage(event, userId)}>View</MenuItem>
-                        <MenuItem color="error" onClick={() => handleDeleteRow(userId)}>
-                          Delete
-                        </MenuItem>
-                      </Menu>
                     </TableCell>
                   </TableRow>
                 );
               })}
 
+            <Menu
+              anchorEl={anchorElOption}
+              open={openOption}
+              sx={{ bottom: 0, left: "-30px" }}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem onClick={(event) => handleOpenDetailsPage(event, userId)}>View</MenuItem>
+              <MenuItem color="error" onClick={handleClickOpenDialog}>
+                Delete
+              </MenuItem>
+            </Menu>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+              <DialogTitle sx={{ textAlign: "center", fontSize: "30px" }}>{"Delete collection"}</DialogTitle>
+              <DialogContent sx={{ alignSelf: "center" }}>
+                <DialogContentText sx={{ textAlign: "center", fontSize: "20px" }}>Are you sure?</DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog}>No</Button>
+                <Button
+                  onClick={() => {
+                    handleDeleteRow(userId);
+                    handleCloseDialog();
+                  }}
+                  autoFocus
+                >
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
             <TableRow
               style={{
                 height: 53 * emptyRows,
