@@ -281,7 +281,7 @@ export const LayoutView = (
         <Toolbar sx={{ mt: 5 }} />
         <Outlet />
       </Box>
-      <ToastContainer theme="colored" />
+      <ToastContainer theme="colored" position="bottom-right" />
     </Box>
   );
 };
