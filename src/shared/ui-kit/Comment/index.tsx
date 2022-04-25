@@ -42,12 +42,12 @@ export const CommentView = ({
             sx={{ width: { xs: 60, md: 76 }, height: { xs: 60, md: 76 } }}
             variant="rounded"
             alt="Remy Sharp"
-            src={user_id.image}
+            src={user_id?.image}
           />
           <Box sx={{ ml: 2, mr: { xs: 0, md: 5 }, flex: 1 }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography color="primary" sx={{ mr: 2, fontSize: { xs: 16, md: 20 } }}>
-                {user_id.username}
+                {user_id?.username}
               </Typography>
               <Typography sx={{ mr: 2, fontSize: { xs: 10, md: 12 } }} color="grey.600">
                 {moment(time).fromNow()}
@@ -56,7 +56,7 @@ export const CommentView = ({
             <Box sx={{ fontSize: { xs: 14, md: 16 } }}>{message}</Box>
           </Box>
           <Box>
-            <IconButton onClick={(event) => handleOpenMenu(event, user_id._id, _id)}>{<MoreHorizIcon />}</IconButton>
+            <IconButton onClick={(event) => handleOpenMenu(event, user_id?._id, _id)}>{<MoreHorizIcon />}</IconButton>
           </Box>
         </Box>
       ))
