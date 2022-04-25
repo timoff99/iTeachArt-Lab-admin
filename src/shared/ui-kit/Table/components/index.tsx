@@ -161,13 +161,13 @@ export const TableView = ({
                       {row.image ? (
                         <Avatar
                           style={{ borderRadius: "50%", width: "36px", height: "36px", marginRight: "16px" }}
-                          src={row.user_id.image}
+                          src={row.user_id?.image}
                           alt={"img"}
                         />
                       ) : (
                         <Skeleton variant="circular" width="36px" height="36px" />
                       )}
-                      <Box>{row.user_id.username}</Box>
+                      <Box>{row.user_id?.username}</Box>
                     </TableCell>
                     <TableCell>{row.likes.length}</TableCell>
                     <TableCell>{row.comments.length}</TableCell>

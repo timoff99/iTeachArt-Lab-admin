@@ -86,7 +86,7 @@ export const LoginView = ({ formik, loading }: ILoginViewProps) => {
           </form>
         </Paper>
       </Grid>
-      <ToastContainer theme="colored" />
+      <ToastContainer theme="colored" position="bottom-right" />
     </Box>
   );
 };
