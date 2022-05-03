@@ -42,8 +42,8 @@ export const StatisticsContainer = () => {
 
     setStatistics([
       { title: "Cookbooks count", value: cookbookCount },
-      { title: "Recipes count", value: cookbookViews },
-      { title: "Cookbooks views", value: recipeCount },
+      { title: "Recipes count", value: recipeCount },
+      { title: "Cookbooks views", value: cookbookViews },
       { title: "Recipes views", value: recipeViews },
     ]);
     setUsersStatistics([
